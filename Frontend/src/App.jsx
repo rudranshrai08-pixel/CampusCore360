@@ -1,218 +1,436 @@
-import { BrowserRouter, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useNavigate,
+} from "react-router-dom";
+
 import "./App.css";
+
+// ================= LOGIN =================
 
 function Login() {
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("admin@gmail.com");
+  const [password, setPassword] = useState("admin");
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
 
   const handleLogin = (e) => {
     e.preventDefault();
 
-    // Temporary frontend login
-    if (email === "admin@gmail.com" && password === "admin123") {
-      setError("");
-      navigate("/dashboard");
-    } else {
-      setError("Invalid email or password");
+    if (!email.trim()) {
+      setError("Please enter your email address.");
+      return;
     }
+
+    if (!password.trim()) {
+      setError("Please enter your password.");
+      return;
+    }
+
+    setError("");
+
+    // Temporary navigation.
+    // Later this will be replaced with Backend API authentication.
+    navigate("/dashboard");
   };
 
   return (
     <div className="login-page">
-      <div className="login-card">
 
-        <div className="brand">
-          <div className="brand-logo">C</div>
+      {/* LEFT BRANDING SECTION */}
 
-          <div>
-            <h1>CampusCore360</h1>
-            <p>Intelligent Campus ERP</p>
+      <div className="login-brand-section">
+
+        <div className="brand-content">
+
+          <div className="brand-logo-large">
+            C
           </div>
+
+          <h1>CampusCore<span>360</span></h1>
+
+          <p className="brand-tagline">
+            Intelligent Campus ERP
+          </p>
+
+          <p className="brand-description">
+            A centralized platform to manage students, faculty,
+            academics and campus operations efficiently.
+          </p>
+
+          <div className="feature-list">
+
+            <div className="feature-item">
+              <div className="feature-icon">✓</div>
+              <div>
+                <strong>Smart Campus Management</strong>
+                <span>Manage your campus from one platform.</span>
+              </div>
+            </div>
+
+            <div className="feature-item">
+              <div className="feature-icon">✓</div>
+              <div>
+                <strong>Secure & Reliable</strong>
+                <span>Designed for modern educational institutions.</span>
+              </div>
+            </div>
+
+            <div className="feature-item">
+              <div className="feature-icon">✓</div>
+              <div>
+                <strong>Centralized Information</strong>
+                <span>Access important campus data easily.</span>
+              </div>
+            </div>
+
+          </div>
+
         </div>
 
-        <div className="login-heading">
-          <h2>Welcome Back</h2>
-          <p>Login to access your campus dashboard</p>
-        </div>
-
-        <form onSubmit={handleLogin}>
-
-          <div className="form-group">
-            <label>Email Address</label>
-
-            <input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Password</label>
-
-            <input
-              type="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="login-options">
-
-            <label className="remember">
-              <input type="checkbox" />
-              Remember me
-            </label>
-
-            <a href="#" onClick={(e) => e.preventDefault()}>
-              Forgot Password?
-            </a>
-
-          </div>
-
-          {error && (
-            <p className="login-error">
-              {error}
-            </p>
-          )}
-
-          <button type="submit" className="login-btn">
-            Login
-          </button>
-
-        </form>
-
-        <div className="login-footer">
-          <p>CampusCore360 © 2026</p>
+        <div className="brand-footer">
+          © 2026 CampusCore360
         </div>
 
       </div>
+
+
+      {/* RIGHT LOGIN SECTION */}
+
+      <div className="login-section">
+
+        <div className="login-card">
+
+          <div className="mobile-brand">
+            <div className="mobile-logo">C</div>
+            <div>
+              <h2>CampusCore<span>360</span></h2>
+              <p>Intelligent Campus ERP</p>
+            </div>
+          </div>
+
+
+          <div className="login-heading">
+
+            <span className="welcome-badge">
+              Welcome back
+            </span>
+
+            <h2>Sign in to your account</h2>
+
+            <p>
+              Enter your credentials to access your campus dashboard.
+            </p>
+
+          </div>
+
+
+          <form onSubmit={handleLogin}>
+
+            {/* EMAIL */}
+
+            <div className="form-group">
+
+              <label htmlFor="email">
+                Email Address
+              </label>
+
+              <div className="input-wrapper">
+
+                <span className="input-icon">
+                  @
+                </span>
+
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email"
+                />
+
+              </div>
+
+            </div>
+
+
+            {/* PASSWORD */}
+
+            <div className="form-group">
+
+              <label htmlFor="password">
+                Password
+              </label>
+
+              <div className="input-wrapper">
+
+                <span className="input-icon">
+                  •
+                </span>
+
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter your password"
+                />
+
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label="Toggle password visibility"
+                >
+                  {showPassword ? "Hide" : "Show"}
+                </button>
+
+              </div>
+
+            </div>
+
+
+            {/* ERROR */}
+
+            {error && (
+              <div className="login-error">
+                {error}
+              </div>
+            )}
+
+
+            {/* OPTIONS */}
+
+            <div className="login-options">
+
+              <label className="remember">
+
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                />
+
+                <span>Remember me</span>
+
+              </label>
+
+              <button
+                type="button"
+                className="forgot-password"
+                onClick={() => alert("Forgot Password feature coming soon.")}
+              >
+                Forgot Password?
+              </button>
+
+            </div>
+
+
+            {/* LOGIN BUTTON */}
+
+            <button
+              type="submit"
+              className="login-btn"
+            >
+              <span>Sign In</span>
+              <span className="arrow">→</span>
+            </button>
+
+          </form>
+
+
+          <div className="security-note">
+
+            <span>🔒</span>
+
+            <span>
+              Your information is protected and secure.
+            </span>
+
+          </div>
+
+
+          <div className="login-footer">
+            CampusCore360 © 2026
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
   );
 }
 
 
+// ================= DASHBOARD =================
+
 function Dashboard() {
+  const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [activeMenu, setActiveMenu] = useState("Dashboard");
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+
+  const menuItems = [
+    { name: "Dashboard", icon: "▦" },
+    { name: "Students", icon: "♙" },
+    { name: "Faculty", icon: "♟" },
+    { name: "Academics", icon: "▤" },
+    { name: "Attendance", icon: "✓" },
+    { name: "Courses", icon: "▣" },
+    { name: "Examinations", icon: "▤" },
+    { name: "Reports", icon: "◫" },
+  ];
+
+  const handleMenuClick = (name) => {
+    setActiveMenu(name);
+    setSidebarOpen(false);
+
+    if (name !== "Dashboard") {
+      alert(`${name} module will be available soon.`);
+    }
+  };
+
+  const handleLogout = () => {
+    navigate("/login");
+  };
+
   return (
-    <div className="dashboard-layout">
+    <div className="erp-dashboard">
 
-      {/* Sidebar */}
-      <aside className="sidebar">
+      {/* MOBILE OVERLAY */}
+      {sidebarOpen && (
+        <div
+          className="erp-overlay"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
 
-        <div className="sidebar-brand">
-          <div className="brand-logo">C</div>
+      {/* SIDEBAR */}
+      <aside
+  className={`erp-sidebar ${
+    sidebarOpen ? "sidebar-open" : ""
+  } ${sidebarCollapsed ? "sidebar-collapsed" : ""}`}
+>
+
+        <div className="erp-brand">
+          <div className="erp-brand-logo">C</div>
+
           <div>
-            <h2>CampusCore360</h2>
-            <span>Intelligent Campus ERP</span>
+            <h2>CampusCore<span>360</span></h2>
+            <p>Campus ERP</p>
           </div>
+          <button
+  className="sidebar-toggle"
+  onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+  title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+>
+  {sidebarCollapsed ? "›" : "‹"}
+</button>
         </div>
 
-        <nav className="sidebar-nav">
+        <div className="erp-menu-title">
+          MAIN MENU
+        </div>
 
-          <p className="nav-title">MAIN MENU</p>
+        <nav className="erp-nav">
 
-          <a className="nav-item active">
-            <span>📊</span>
-            Dashboard
-          </a>
+          {menuItems.map((item) => (
+            <button
+  key={item.name}
+  className={`erp-nav-item ${
+    activeMenu === item.name ? "active" : ""
+  }`}
+  onClick={() => handleMenuClick(item.name)}
+  data-tooltip={item.name}
+>
+              <span className="erp-nav-icon">
+                {item.icon}
+              </span>
 
-          <a className="nav-item">
-            <span>👨‍🎓</span>
-            Students
-          </a>
-
-          <a className="nav-item">
-            <span>👨‍🏫</span>
-            Faculty
-          </a>
-
-          <a className="nav-item">
-            <span>📅</span>
-            Attendance
-          </a>
-
-          <a className="nav-item">
-            <span>💰</span>
-            Fees
-          </a>
-
-          <a className="nav-item">
-            <span>📝</span>
-            Exams
-          </a>
-
-          <a className="nav-item">
-            <span>📚</span>
-            Courses
-          </a>
-
-          <a className="nav-item">
-            <span>📢</span>
-            Notices
-          </a>
-
-          <p className="nav-title">SYSTEM</p>
-
-          <a className="nav-item">
-            <span>⚙️</span>
-            Settings
-          </a>
+              <span>{item.name}</span>
+            </button>
+          ))}
 
         </nav>
 
-        <div className="sidebar-bottom">
-          <div className="admin-mini">
-            <div className="avatar">A</div>
-            <div>
-              <strong>Admin</strong>
-              <span>Administrator</span>
-            </div>
-          </div>
+        <div className="erp-sidebar-bottom">
+
+          <button
+            className="erp-nav-item"
+            onClick={() => alert("Settings module coming soon.")}
+          >
+            <span className="erp-nav-icon">⚙</span>
+            <span>Settings</span>
+          </button>
+
+          <button
+            className="erp-nav-item logout-item"
+            onClick={handleLogout}
+          >
+            <span className="erp-nav-icon">↪</span>
+            <span>Logout</span>
+          </button>
+
         </div>
 
       </aside>
 
 
-      {/* Main Content */}
-      <main className="dashboard-main">
+      {/* MAIN AREA */}
+      <main className="erp-main">
 
-        {/* Topbar */}
-        <header className="topbar">
+        {/* TOPBAR */}
+        <header className="erp-topbar">
 
-          <div>
-            <h1>Dashboard</h1>
-            <p>Welcome back, Admin 👋</p>
+          <button
+            className="erp-menu-toggle"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+          >
+            ☰
+          </button>
+
+          <div className="erp-search">
+
+            <span>⌕</span>
+
+            <input
+              type="text"
+              placeholder="Search students, faculty, courses..."
+            />
+
           </div>
 
-          <div className="topbar-actions">
+          <div className="erp-topbar-right">
 
-            <div className="search-box">
-              🔍
-              <input
-                type="text"
-                placeholder="Search..."
-              />
-            </div>
-
-            <button className="icon-btn">
+            <button
+              className="erp-icon-btn"
+              title="Notifications"
+              onClick={() => alert("No new notifications.")}
+            >
               🔔
               <span className="notification-dot"></span>
             </button>
 
-            <div className="profile">
-              <div className="avatar">A</div>
-              <div>
+            <div className="erp-profile">
+
+              <div className="erp-avatar">
+                A
+              </div>
+
+              <div className="erp-profile-info">
                 <strong>Admin</strong>
                 <span>Administrator</span>
               </div>
+
+              <span className="profile-arrow">⌄</span>
+
             </div>
 
           </div>
@@ -220,96 +438,214 @@ function Dashboard() {
         </header>
 
 
-        {/* Dashboard Content */}
-        <section className="dashboard-content">
+        {/* CONTENT */}
+        <section className="erp-content">
 
-          {/* Stats */}
-          <div className="stats-grid">
+          {/* PAGE HEADER */}
+          <div className="erp-page-header">
 
-            <div className="stat-card">
-              <div className="stat-icon blue">👨‍🎓</div>
-              <div>
-                <p>Total Students</p>
-                <h2>2,450</h2>
-                <span className="positive">↑ 8.2% this year</span>
-              </div>
+            <div>
+              <span className="erp-welcome">
+                OVERVIEW
+              </span>
+
+              <h1>Dashboard</h1>
+
+              <p>
+                Welcome back, Admin. Here's what's happening on your campus.
+              </p>
             </div>
 
-            <div className="stat-card">
-              <div className="stat-icon purple">👨‍🏫</div>
-              <div>
-                <p>Total Faculty</p>
-                <h2>186</h2>
-                <span className="positive">↑ 4.5% this year</span>
-              </div>
-            </div>
-
-            <div className="stat-card">
-              <div className="stat-icon orange">📚</div>
-              <div>
-                <p>Active Courses</p>
-                <h2>72</h2>
-                <span className="neutral">Current semester</span>
-              </div>
-            </div>
-
-            <div className="stat-card">
-              <div className="stat-icon green">📊</div>
-              <div>
-                <p>Avg. Attendance</p>
-                <h2>87.4%</h2>
-                <span className="positive">↑ 2.1% this month</span>
-              </div>
-            </div>
+            <button
+              className="erp-primary-btn"
+              onClick={() => alert("Add Student module coming soon.")}
+            >
+              <span>＋</span>
+              Add Student
+            </button>
 
           </div>
 
 
-          {/* Middle Section */}
-          <div className="dashboard-grid">
+          {/* STAT CARDS */}
+          <div className="erp-stats-grid">
 
-            {/* Attendance */}
-            <div className="dashboard-card attendance-card">
-
-              <div className="card-header">
-                <div>
-                  <h3>Attendance Overview</h3>
-                  <p>Current academic semester</p>
+            <button
+              className="erp-stat-card"
+              onClick={() => handleMenuClick("Students")}
+            >
+              <div className="erp-stat-top">
+                <div className="erp-stat-icon blue">
+                  ♙
                 </div>
 
-                <select>
-                  <option>This Month</option>
-                  <option>This Semester</option>
-                </select>
+                <span className="erp-stat-growth">
+                  +8.2%
+                </span>
               </div>
+
+              <div className="erp-stat-number">
+                2,450
+              </div>
+
+              <div className="erp-stat-label">
+                Total Students
+              </div>
+
+              <div className="erp-stat-footer">
+                <span>Compared to last month</span>
+                <span>→</span>
+              </div>
+            </button>
+
+
+            <button
+              className="erp-stat-card"
+              onClick={() => handleMenuClick("Faculty")}
+            >
+              <div className="erp-stat-top">
+                <div className="erp-stat-icon purple">
+                  ♟
+                </div>
+
+                <span className="erp-stat-growth">
+                  +4.5%
+                </span>
+              </div>
+
+              <div className="erp-stat-number">
+                186
+              </div>
+
+              <div className="erp-stat-label">
+                Total Faculty
+              </div>
+
+              <div className="erp-stat-footer">
+                <span>Compared to last month</span>
+                <span>→</span>
+              </div>
+            </button>
+
+
+            <button
+              className="erp-stat-card"
+              onClick={() => handleMenuClick("Courses")}
+            >
+              <div className="erp-stat-top">
+                <div className="erp-stat-icon orange">
+                  ▣
+                </div>
+
+                <span className="erp-stat-growth">
+                  +12%
+                </span>
+              </div>
+
+              <div className="erp-stat-number">
+                64
+              </div>
+
+              <div className="erp-stat-label">
+                Active Courses
+              </div>
+
+              <div className="erp-stat-footer">
+                <span>Currently running</span>
+                <span>→</span>
+              </div>
+            </button>
+
+
+            <button
+              className="erp-stat-card"
+              onClick={() => handleMenuClick("Attendance")}
+            >
+              <div className="erp-stat-top">
+                <div className="erp-stat-icon green">
+                  ✓
+                </div>
+
+                <span className="erp-stat-growth">
+                  +2.4%
+                </span>
+              </div>
+
+              <div className="erp-stat-number">
+                92.6%
+              </div>
+
+              <div className="erp-stat-label">
+                Average Attendance
+              </div>
+
+              <div className="erp-stat-footer">
+                <span>Overall campus</span>
+                <span>→</span>
+              </div>
+            </button>
+
+          </div>
+
+
+          {/* MAIN GRID */}
+          <div className="erp-main-grid">
+
+
+            {/* ATTENDANCE */}
+            <div className="erp-panel attendance-panel">
+
+              <div className="erp-panel-header">
+
+                <div>
+                  <h2>Attendance Overview</h2>
+                  <p>Current academic session</p>
+                </div>
+
+                <button
+                  className="erp-small-btn"
+                  onClick={() => handleMenuClick("Attendance")}
+                >
+                  View Details
+                </button>
+
+              </div>
+
 
               <div className="attendance-content">
 
                 <div className="attendance-circle">
+
                   <div>
-                    <strong>87%</strong>
+                    <strong>92.6%</strong>
                     <span>Attendance</span>
                   </div>
+
                 </div>
 
-                <div className="attendance-info">
 
-                  <div>
-                    <span className="legend blue-bg"></span>
-                    <p>Present</p>
-                    <strong>87%</strong>
+                <div className="attendance-details">
+
+                  <div className="attendance-item">
+                    <span className="attendance-dot present"></span>
+                    <div>
+                      <strong>Present</strong>
+                      <span>2,268 Students</span>
+                    </div>
+                    <b>92.6%</b>
                   </div>
 
-                  <div>
-                    <span className="legend gray-bg"></span>
-                    <p>Absent</p>
-                    <strong>8%</strong>
+                  <div className="attendance-item">
+                    <span className="attendance-dot absent"></span>
+                    <div>
+                      <strong>Absent</strong>
+                      <span>182 Students</span>
+                    </div>
+                    <b>7.4%</b>
                   </div>
 
-                  <div>
-                    <span className="legend orange-bg"></span>
-                    <p>Leave</p>
-                    <strong>5%</strong>
+                  <div className="attendance-progress">
+                    <div className="attendance-progress-fill"></div>
                   </div>
 
                 </div>
@@ -319,36 +655,62 @@ function Dashboard() {
             </div>
 
 
-            {/* Quick Actions */}
-            <div className="dashboard-card">
+            {/* QUICK ACTIONS */}
+            <div className="erp-panel">
 
-              <div className="card-header">
+              <div className="erp-panel-header">
+
                 <div>
-                  <h3>Quick Actions</h3>
+                  <h2>Quick Actions</h2>
                   <p>Frequently used modules</p>
                 </div>
+
               </div>
 
               <div className="quick-actions">
 
-                <button>
-                  <span>➕</span>
-                  Add Student
+                <button
+                  onClick={() => alert("Add Student module coming soon.")}
+                >
+                  <span className="quick-icon blue">＋</span>
+                  <div>
+                    <strong>Add Student</strong>
+                    <small>Create student record</small>
+                  </div>
+                  <span>→</span>
                 </button>
 
-                <button>
-                  <span>👨‍🏫</span>
-                  Add Faculty
+                <button
+                  onClick={() => alert("Faculty module coming soon.")}
+                >
+                  <span className="quick-icon purple">♟</span>
+                  <div>
+                    <strong>Manage Faculty</strong>
+                    <small>View faculty records</small>
+                  </div>
+                  <span>→</span>
                 </button>
 
-                <button>
-                  <span>📢</span>
-                  Create Notice
+                <button
+                  onClick={() => alert("Course module coming soon.")}
+                >
+                  <span className="quick-icon orange">▣</span>
+                  <div>
+                    <strong>Manage Courses</strong>
+                    <small>View active courses</small>
+                  </div>
+                  <span>→</span>
                 </button>
 
-                <button>
-                  <span>📝</span>
-                  Schedule Exam
+                <button
+                  onClick={() => alert("Reports module coming soon.")}
+                >
+                  <span className="quick-icon green">◫</span>
+                  <div>
+                    <strong>Generate Report</strong>
+                    <small>Download campus report</small>
+                  </div>
+                  <span>→</span>
                 </button>
 
               </div>
@@ -358,50 +720,105 @@ function Dashboard() {
           </div>
 
 
-          {/* Bottom Section */}
-          <div className="dashboard-grid bottom-grid">
+          {/* BOTTOM GRID */}
+          <div className="erp-bottom-grid">
 
-            {/* Notices */}
-            <div className="dashboard-card">
 
-              <div className="card-header">
+            {/* RECENT ACTIVITIES */}
+            <div className="erp-panel">
+
+              <div className="erp-panel-header">
+
                 <div>
-                  <h3>Recent Notices</h3>
-                  <p>Latest campus announcements</p>
+                  <h2>Recent Activities</h2>
+                  <p>Latest campus updates</p>
                 </div>
 
-                <button className="view-all">
+                <button
+                  className="erp-text-btn"
+                  onClick={() => alert("Showing all activities.")}
+                >
                   View All
                 </button>
+
               </div>
 
-              <div className="notice-list">
 
-                <div className="notice">
-                  <div className="notice-icon blue">📢</div>
-                  <div>
-                    <strong>Mid Semester Examination</strong>
-                    <p>Examinations will begin from 15 September.</p>
-                    <small>2 hours ago</small>
+              <div className="activity-list">
+
+                <div className="activity-item">
+
+                  <div className="activity-avatar blue">
+                    ♙
                   </div>
+
+                  <div>
+                    <strong>
+                      24 new students registered
+                    </strong>
+
+                    <span>
+                      Student Management • 15 minutes ago
+                    </span>
+                  </div>
+
                 </div>
 
-                <div className="notice">
-                  <div className="notice-icon green">🎓</div>
-                  <div>
-                    <strong>Placement Drive</strong>
-                    <p>Registration is open for upcoming campus placements.</p>
-                    <small>Yesterday</small>
+
+                <div className="activity-item">
+
+                  <div className="activity-avatar purple">
+                    ♟
                   </div>
+
+                  <div>
+                    <strong>
+                      Faculty profile updated
+                    </strong>
+
+                    <span>
+                      Faculty Management • 42 minutes ago
+                    </span>
+                  </div>
+
                 </div>
 
-                <div className="notice">
-                  <div className="notice-icon orange">📅</div>
-                  <div>
-                    <strong>Holiday Notice</strong>
-                    <p>Campus will remain closed on the upcoming holiday.</p>
-                    <small>2 days ago</small>
+
+                <div className="activity-item">
+
+                  <div className="activity-avatar orange">
+                    ▣
                   </div>
+
+                  <div>
+                    <strong>
+                      New course added: Data Science
+                    </strong>
+
+                    <span>
+                      Academics • 1 hour ago
+                    </span>
+                  </div>
+
+                </div>
+
+
+                <div className="activity-item">
+
+                  <div className="activity-avatar green">
+                    ✓
+                  </div>
+
+                  <div>
+                    <strong>
+                      Attendance report generated
+                    </strong>
+
+                    <span>
+                      Reports • 2 hours ago
+                    </span>
+                  </div>
+
                 </div>
 
               </div>
@@ -409,59 +826,70 @@ function Dashboard() {
             </div>
 
 
-            {/* Upcoming Events */}
-            <div className="dashboard-card">
+            {/* SYSTEM STATUS */}
+            <div className="erp-panel system-panel">
 
-              <div className="card-header">
+              <div className="erp-panel-header">
+
                 <div>
-                  <h3>Upcoming Events</h3>
-                  <p>Important dates</p>
+                  <h2>System Status</h2>
+                  <p>CampusCore360 services</p>
                 </div>
+
+                <span className="system-online">
+                  ● Online
+                </span>
+
               </div>
 
-              <div className="event-list">
 
-                <div className="event">
-                  <div className="event-date">
-                    <strong>15</strong>
-                    <span>SEP</span>
-                  </div>
+              <div className="system-status-list">
 
-                  <div>
-                    <strong>Mid Semester Exam</strong>
-                    <p>All Departments</p>
-                  </div>
+                <div>
+                  <span>Database</span>
+                  <b>Operational</b>
+                  <i></i>
                 </div>
 
-                <div className="event">
-                  <div className="event-date">
-                    <strong>20</strong>
-                    <span>SEP</span>
-                  </div>
-
-                  <div>
-                    <strong>Placement Drive</strong>
-                    <p>Final Year Students</p>
-                  </div>
+                <div>
+                  <span>Authentication</span>
+                  <b>Operational</b>
+                  <i></i>
                 </div>
 
-                <div className="event">
-                  <div className="event-date">
-                    <strong>25</strong>
-                    <span>SEP</span>
-                  </div>
-
-                  <div>
-                    <strong>Faculty Meeting</strong>
-                    <p>Conference Hall</p>
-                  </div>
+                <div>
+                  <span>Student Portal</span>
+                  <b>Operational</b>
+                  <i></i>
                 </div>
 
+                <div>
+                  <span>API Services</span>
+                  <b>Operational</b>
+                  <i></i>
+                </div>
+
+              </div>
+
+              <div className="system-footer">
+                Last updated just now
               </div>
 
             </div>
 
           </div>
+
+
+          {/* FOOTER */}
+          <footer className="erp-footer">
+            <span>
+              © 2026 CampusCore360
+            </span>
+
+            <span>
+              Intelligent Campus ERP
+            </span>
+          </footer>
 
         </section>
 
@@ -471,6 +899,8 @@ function Dashboard() {
   );
 }
 
+
+// ================= APP =================
 
 function App() {
   return (
