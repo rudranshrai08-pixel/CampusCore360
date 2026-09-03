@@ -5,10 +5,10 @@ import {
   Route,
   Navigate,
   useNavigate,
+   useLocation,
 } from "react-router-dom";
-
 import "./App.css";
-
+import Students from "./Components/students/students.jsx";
 // ================= LOGIN =================
 
 function Login() {
@@ -267,16 +267,42 @@ function Login() {
     </div>
   );
 }
+// ================= ERP MODULE PAGE =================
 
+function ModulePage({ title, description }) {
+  return (
+    <div className="erp-module-page">
+      <div className="erp-module-card">
+        <span className="erp-welcome">CAMPUSCORE360</span>
+
+        <h1>{title}</h1>
+
+        <p>{description}</p>
+
+        <div className="module-coming-soon">
+          Module is ready for development.
+        </div>
+      </div>
+    </div>
+  );
+}
 
 // ================= DASHBOARD =================
 
 function Dashboard() {
   const navigate = useNavigate();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [activeMenu, setActiveMenu] = useState("Dashboard");
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+const location = useLocation();
 
+const [sidebarOpen, setSidebarOpen] = useState(false);
+const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+
+const activeMenu =
+  location.pathname === "/dashboard"
+    ? "Dashboard"
+    : location.pathname
+        .replace("/", "")
+        .replace("-", " ")
+        .replace(/\b\w/g, (char) => char.toUpperCase());
   const menuItems = [
     { name: "Dashboard", icon: "▦" },
     { name: "Students", icon: "♙" },
@@ -288,14 +314,22 @@ function Dashboard() {
     { name: "Reports", icon: "◫" },
   ];
 
-  const handleMenuClick = (name) => {
-    setActiveMenu(name);
-    setSidebarOpen(false);
+ const handleMenuClick = (name) => {
+  setSidebarOpen(false);
 
-    if (name !== "Dashboard") {
-      alert(`${name} module will be available soon.`);
-    }
+  const routes = {
+    Dashboard: "/dashboard",
+    Students: "/students",
+    Faculty: "/faculty",
+    Academics: "/academics",
+    Attendance: "/attendance",
+    Courses: "/courses",
+    Examinations: "/examinations",
+    Reports: "/reports",
   };
+
+  navigate(routes[name]);
+};
 
   const handleLogout = () => {
     navigate("/login");
@@ -363,9 +397,15 @@ function Dashboard() {
         <div className="erp-sidebar-bottom">
 
           <button
-            className="erp-nav-item"
-            onClick={() => alert("Settings module coming soon.")}
-          >
+  className={`erp-nav-item ${
+    activeMenu === "Settings" ? "active" : ""
+  }`}
+  onClick={() => {
+    setSidebarOpen(false);
+    navigate("/settings");
+  }}
+  data-tooltip="Settings"
+>
             <span className="erp-nav-icon">⚙</span>
             <span>Settings</span>
           </button>
@@ -922,10 +962,83 @@ function App() {
           path="/dashboard"
           element={<Dashboard />}
         />
+     <Route
+  path="/students"
+  element={<Students />}
+/>
 
-      </Routes>
+<Route
+  path="/faculty"
+  element={
+    <ModulePage
+      title="Faculty"
+      description="Manage faculty profiles, departments and information."
+    />
+  }
+/>
 
+<Route
+  path="/academics"
+  element={
+    <ModulePage
+      title="Academics"
+      description="Manage academic programs, semesters and activities."
+    />
+  }
+/>
+
+<Route
+  path="/attendance"
+  element={
+    <ModulePage
+      title="Attendance"
+      description="Track and manage student attendance."
+    />
+  }
+/>
+
+<Route
+  path="/courses"
+  element={
+    <ModulePage
+      title="Courses"
+      description="Manage courses, subjects and course schedules."
+    />
+  }
+/>
+
+<Route
+  path="/examinations"
+  element={
+    <ModulePage
+      title="Examinations"
+      description="Manage examinations, schedules and results."
+    />
+  }
+/>
+
+<Route
+  path="/reports"
+  element={
+    <ModulePage
+      title="Reports"
+      description="View and generate campus management reports."
+    />
+  }
+/>
+
+<Route
+  path="/settings"
+  element={
+    <ModulePage
+      title="Settings"
+      description="Manage CampusCore360 system settings."
+    />
+  }
+/>
+  </Routes>
     </BrowserRouter>
+    
   );
 }
 
