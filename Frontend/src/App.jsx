@@ -1,15 +1,47 @@
 import { useState } from "react";
+
+import { MotionConfig, motion } from "framer-motion";
+
+import {
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  ArrowRight,
+  ShieldCheck,
+  Users,
+  BookOpen,
+  BarChart3,
+  CalendarDays,
+  ClipboardCheck,
+  ChevronDown,
+  LayoutDashboard,
+  GraduationCap,
+  Settings,
+  LogOut,
+  Menu,
+  Bell,
+  Search,
+  Plus,
+} from "lucide-react";
+
 import {
   BrowserRouter,
   Routes,
   Route,
   Navigate,
   useNavigate,
-   useLocation,
+  useLocation,
 } from "react-router-dom";
+
 import "./App.css";
+
 import Students from "./Components/students/students.jsx";
-// ================= LOGIN =================
+import ModulePage, { Workspace } from "./Components/modules/ModulePage.jsx";
+
+/* =========================================================
+   LOGIN
+   ========================================================= */
 
 function Login() {
   const navigate = useNavigate();
@@ -19,6 +51,7 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -34,304 +67,642 @@ function Login() {
     }
 
     setError("");
+    setIsLoading(true);
 
-    // Temporary navigation.
-    // Later this will be replaced with Backend API authentication.
-    navigate("/dashboard");
+    setTimeout(() => {
+      navigate("/dashboard");
+    }, 900);
   };
 
   return (
-    <div className="login-page">
-      <div className="login-ambient login-ambient-one" aria-hidden="true" />
-      <div className="login-ambient login-ambient-two" aria-hidden="true" />
+    <div className="cc-login-page">
 
-      {/* LEFT BRANDING SECTION */}
+      {/* Animated Background */}
+      <div className="cc-login-background">
 
-      <div className="login-brand-section">
+        <motion.div
+          className="cc-orb cc-orb-one"
+          animate={{
+            x: [0, 45, 0],
+            y: [0, -35, 0],
+            scale: [1, 1.08, 1],
+          }}
+          transition={{
+            duration: 9,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
 
-        <div className="brand-content">
+        <motion.div
+          className="cc-orb cc-orb-two"
+          animate={{
+            x: [0, -40, 0],
+            y: [0, 35, 0],
+            scale: [1, 1.1, 1],
+          }}
+          transition={{
+            duration: 11,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
 
-          <div className="brand-logo-large">
-            C
-          </div>
+        <motion.div
+          className="cc-orb cc-orb-three"
+          animate={{
+            y: [0, -25, 0],
+            opacity: [0.25, 0.45, 0.25],
+          }}
+          transition={{
+            duration: 7,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
 
-          <h1>CampusCore<span>360</span></h1>
-
-          <p className="brand-tagline">
-            Intelligent Campus ERP
-          </p>
-
-          <p className="brand-description">
-            A centralized platform to manage students, faculty,
-            academics and campus operations efficiently.
-          </p>
-
-          <div className="feature-list">
-
-            <div className="feature-item">
-              <div className="feature-icon">✓</div>
-              <div>
-                <strong>Smart Campus Management</strong>
-                <span>Manage your campus from one platform.</span>
-              </div>
-            </div>
-
-            <div className="feature-item">
-              <div className="feature-icon">✓</div>
-              <div>
-                <strong>Secure & Reliable</strong>
-                <span>Designed for modern educational institutions.</span>
-              </div>
-            </div>
-
-            <div className="feature-item">
-              <div className="feature-icon">✓</div>
-              <div>
-                <strong>Centralized Information</strong>
-                <span>Access important campus data easily.</span>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-
-        <div className="brand-footer">
-          © 2026 CampusCore360
-        </div>
-
+        <div className="cc-login-grid" />
       </div>
 
+      <div className="cc-login-container">
 
-      {/* RIGHT LOGIN SECTION */}
+        {/* =================================================
+            LEFT SIDE
+            ================================================= */}
 
-      <div className="login-section">
+        <motion.section
+          className="cc-login-showcase"
+          initial={{ opacity: 0, x: -60 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{
+            duration: 0.8,
+            ease: "easeOut",
+          }}
+        >
 
-        <div className="login-card">
+          <motion.div
+            className="cc-logo"
+            initial={{
+              opacity: 0,
+              scale: 0.5,
+              rotate: -15,
+            }}
+            animate={{
+              opacity: 1,
+              scale: 1,
+              rotate: 0,
+            }}
+            transition={{
+              duration: 0.8,
+              type: "spring",
+              stiffness: 180,
+            }}
+          >
+            C
+          </motion.div>
 
-          <div className="mobile-brand">
-            <div className="mobile-logo">C</div>
-            <div>
-              <h2>CampusCore<span>360</span></h2>
-              <p>Intelligent Campus ERP</p>
+          <motion.div
+            className="cc-showcase-content"
+            initial={{
+              opacity: 0,
+              y: 30,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              delay: 0.2,
+              duration: 0.7,
+            }}
+          >
+
+            <div className="cc-status">
+              <span className="cc-status-dot" />
+              SMART CAMPUS PLATFORM
             </div>
-          </div>
 
+            <h1>
+              CampusCore<span>360</span>
+            </h1>
 
-          <div className="login-heading">
+            <h2>
+              One Platform.
+              <br />
+              <span>Smarter Campus.</span>
+            </h2>
 
-            <span className="welcome-badge">
-              Welcome back
-            </span>
-
-            <h2>Sign in to your account</h2>
-
-            <p>
-              Enter your credentials to access your campus dashboard.
+            <p className="cc-showcase-description">
+              A modern campus management platform designed to
+              connect students, faculty, academics and campus
+              operations in one intelligent ecosystem.
             </p>
 
+            <div className="cc-feature-list">
+
+              <motion.div
+                className="cc-feature"
+                initial={{
+                  opacity: 0,
+                  x: -25,
+                }}
+                animate={{
+                  opacity: 1,
+                  x: 0,
+                }}
+                transition={{
+                  delay: 0.45,
+                }}
+                whileHover={{
+                  x: 6,
+                }}
+              >
+
+                <div className="cc-feature-icon">
+                  <Users size={19} />
+                </div>
+
+                <div>
+                  <strong>
+                    Smart Campus Management
+                  </strong>
+
+                  <span>
+                    Manage your campus from one platform.
+                  </span>
+                </div>
+
+              </motion.div>
+
+              <motion.div
+                className="cc-feature"
+                initial={{
+                  opacity: 0,
+                  x: -25,
+                }}
+                animate={{
+                  opacity: 1,
+                  x: 0,
+                }}
+                transition={{
+                  delay: 0.6,
+                }}
+                whileHover={{
+                  x: 6,
+                }}
+              >
+
+                <div className="cc-feature-icon">
+                  <BookOpen size={19} />
+                </div>
+
+                <div>
+                  <strong>
+                    Connected Academics
+                  </strong>
+
+                  <span>
+                    Organize courses, faculty and students.
+                  </span>
+                </div>
+
+              </motion.div>
+
+              <motion.div
+                className="cc-feature"
+                initial={{
+                  opacity: 0,
+                  x: -25,
+                }}
+                animate={{
+                  opacity: 1,
+                  x: 0,
+                }}
+                transition={{
+                  delay: 0.75,
+                }}
+                whileHover={{
+                  x: 6,
+                }}
+              >
+
+                <div className="cc-feature-icon">
+                  <BarChart3 size={19} />
+                </div>
+
+                <div>
+                  <strong>
+                    Powerful Insights
+                  </strong>
+
+                  <span>
+                    Monitor your campus with useful analytics.
+                  </span>
+                </div>
+
+              </motion.div>
+
+            </div>
+
+          </motion.div>
+
+          <div className="cc-showcase-footer">
+            <span>
+              © 2026 CampusCore360
+            </span>
+
+            <span>
+              Intelligent Campus ERP
+            </span>
           </div>
 
+        </motion.section>
 
-          <form onSubmit={handleLogin}>
+        {/* =================================================
+            RIGHT LOGIN
+            ================================================= */}
 
-            {/* EMAIL */}
+        <section className="cc-login-form-area">
 
-            <div className="form-group">
+          <motion.div
+            className="cc-login-card"
+            initial={{
+              opacity: 0,
+              y: 45,
+              scale: 0.96,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+              scale: 1,
+            }}
+            transition={{
+              duration: 0.75,
+              delay: 0.15,
+              ease: "easeOut",
+            }}
+          >
 
-              <label htmlFor="email">
-                Email Address
-              </label>
+            {/* Mobile Brand */}
 
-              <div className="input-wrapper">
+            <div className="cc-mobile-brand">
 
-                <span className="input-icon">
-                  @
-                </span>
+              <div className="cc-mobile-logo">
+                C
+              </div>
 
-                <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
-                />
+              <div>
+
+                <strong>
+                  CampusCore<span>360</span>
+                </strong>
+
+                <small>
+                  Intelligent Campus ERP
+                </small>
 
               </div>
 
             </div>
 
+            {/* Heading */}
 
-            {/* PASSWORD */}
+            <motion.div
+              className="cc-login-heading"
+              initial={{
+                opacity: 0,
+                y: 15,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                delay: 0.35,
+              }}
+            >
 
-            <div className="form-group">
+              <div className="cc-welcome">
+                <span>✦</span>
+                Welcome back
+              </div>
 
-              <label htmlFor="password">
-                Password
-              </label>
+              <h2>
+                Sign in to your account
+              </h2>
 
-              <div className="input-wrapper">
+              <p>
+                Enter your credentials to access your
+                campus dashboard.
+              </p>
 
-                <span className="input-icon">
-                  •
-                </span>
+            </motion.div>
 
-                <input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter your password"
-                />
+            {/* Login Form */}
+
+            <form onSubmit={handleLogin}>
+
+              {/* Email */}
+
+              <motion.div
+                className="cc-form-group"
+                initial={{
+                  opacity: 0,
+                  y: 15,
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                transition={{
+                  delay: 0.45,
+                }}
+              >
+
+                <label htmlFor="cc-email">
+                  Email Address
+                </label>
+
+                <div className="cc-input-wrapper">
+
+                  <Mail
+                    size={19}
+                    className="cc-input-icon"
+                  />
+
+                  <input
+                    id="cc-email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      setError("");
+                    }}
+                    placeholder="admin@gmail.com"
+                    autoComplete="email"
+                  />
+
+                </div>
+
+              </motion.div>
+
+              {/* Password */}
+
+              <motion.div
+                className="cc-form-group"
+                initial={{
+                  opacity: 0,
+                  y: 15,
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                transition={{
+                  delay: 0.55,
+                }}
+              >
+
+                <label htmlFor="cc-password">
+                  Password
+                </label>
+
+                <div className="cc-input-wrapper">
+
+                  <Lock
+                    size={19}
+                    className="cc-input-icon"
+                  />
+
+                  <input
+                    id="cc-password"
+                    type={
+                      showPassword
+                        ? "text"
+                        : "password"
+                    }
+                    value={password}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                      setError("");
+                    }}
+                    placeholder="Enter your password"
+                    autoComplete="current-password"
+                  />
+
+                  <button
+                    type="button"
+                    className="cc-password-toggle"
+                    onClick={() =>
+                      setShowPassword(!showPassword)
+                    }
+                    aria-label={
+                      showPassword
+                        ? "Hide password"
+                        : "Show password"
+                    }
+                  >
+
+                    {showPassword ? (
+                      <EyeOff size={19} />
+                    ) : (
+                      <Eye size={19} />
+                    )}
+
+                  </button>
+
+                </div>
+
+              </motion.div>
+
+              {/* Error */}
+
+              {error && (
+                <motion.div
+                  className="cc-login-error"
+                  initial={{
+                    opacity: 0,
+                    height: 0,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    height: "auto",
+                  }}
+                >
+                  {error}
+                </motion.div>
+              )}
+
+              {/* Remember + Forgot */}
+
+              <motion.div
+                className="cc-login-options"
+                initial={{
+                  opacity: 0,
+                }}
+                animate={{
+                  opacity: 1,
+                }}
+                transition={{
+                  delay: 0.65,
+                }}
+              >
+
+                <label className="cc-remember">
+
+                  <input
+                    type="checkbox"
+                    checked={rememberMe}
+                    onChange={(e) =>
+                      setRememberMe(e.target.checked)
+                    }
+                  />
+
+                  <span className="cc-checkbox">
+                    ✓
+                  </span>
+
+                  <span>
+                    Remember me
+                  </span>
+
+                </label>
 
                 <button
                   type="button"
-                  className="password-toggle"
-                  onClick={() => setShowPassword(!showPassword)}
-                  aria-label="Toggle password visibility"
+                  className="cc-forgot"
+                  onClick={() => setError("Password recovery isn't connected in this demo. Contact your campus administrator for access.")}
                 >
-                  {showPassword ? "Hide" : "Show"}
+                  Forgot Password?
                 </button>
 
-              </div>
+              </motion.div>
 
-            </div>
+              {/* Sign In Button */}
 
-
-            {/* ERROR */}
-
-            {error && (
-              <div className="login-error">
-                {error}
-              </div>
-            )}
-
-
-            {/* OPTIONS */}
-
-            <div className="login-options">
-
-              <label className="remember">
-
-                <input
-                  type="checkbox"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                />
-
-                <span>Remember me</span>
-
-              </label>
-
-              <button
-                type="button"
-                className="forgot-password"
-                onClick={() => alert("Forgot Password feature coming soon.")}
+              <motion.button
+                type="submit"
+                className="cc-login-button"
+                disabled={isLoading}
+                whileHover={{
+                  scale: isLoading ? 1 : 1.015,
+                }}
+                whileTap={{
+                  scale: isLoading ? 1 : 0.98,
+                }}
               >
-                Forgot Password?
-              </button>
 
+                {isLoading ? (
+                  <>
+                    <span className="cc-spinner" />
+                    Signing in...
+                  </>
+                ) : (
+                  <>
+                    <span>
+                      Sign In
+                    </span>
+
+                    <ArrowRight size={20} />
+                  </>
+                )}
+
+              </motion.button>
+
+            </form>
+
+            {/* Security */}
+
+            <motion.div
+              className="cc-security"
+              initial={{
+                opacity: 0,
+              }}
+              animate={{
+                opacity: 1,
+              }}
+              transition={{
+                delay: 0.8,
+              }}
+            >
+
+              <ShieldCheck size={17} />
+
+              <span>
+                Your information is protected and secure.
+              </span>
+
+            </motion.div>
+
+            {/* Footer */}
+
+            <div className="cc-card-footer">
+              CampusCore360 © 2026
             </div>
 
+          </motion.div>
 
-            {/* LOGIN BUTTON */}
+        </section>
 
-            <button
-              type="submit"
-              className="login-btn"
-            >
-              <span>Sign In</span>
-              <span className="arrow">→</span>
-            </button>
-
-          </form>
-
-
-          <div className="security-note">
-
-            <span>🔒</span>
-
-            <span>
-              Your information is protected and secure.
-            </span>
-
-          </div>
-
-
-          <div className="login-footer">
-            CampusCore360 © 2026
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-  );
-}
-// ================= ERP MODULE PAGE =================
-
-function ModulePage({ title, description }) {
-  return (
-    <div className="erp-module-page">
-      <div className="erp-module-card">
-        <span className="erp-welcome">CAMPUSCORE360</span>
-
-        <h1>{title}</h1>
-
-        <p>{description}</p>
-
-        <div className="module-coming-soon">
-          Module is ready for development.
-        </div>
       </div>
     </div>
   );
 }
 
-// ================= DASHBOARD =================
+
+/* =========================================================
+   DASHBOARD
+   ========================================================= */
 
 function Dashboard() {
   const navigate = useNavigate();
-const location = useLocation();
+  const location = useLocation();
 
-const [sidebarOpen, setSidebarOpen] = useState(false);
-const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [sidebarOpen, setSidebarOpen] =
+    useState(false);
 
-const activeMenu =
-  location.pathname === "/dashboard"
-    ? "Dashboard"
-    : location.pathname
-        .replace("/", "")
-        .replace("-", " ")
-        .replace(/\b\w/g, (char) => char.toUpperCase());
+  const [sidebarCollapsed, setSidebarCollapsed] =
+    useState(false);
+  const [topbarPanel, setTopbarPanel] = useState("");
+  const [dashboardSearch, setDashboardSearch] = useState("");
+
+  const activeMenu =
+    location.pathname === "/dashboard"
+      ? "Dashboard"
+      : location.pathname
+          .replace("/", "")
+          .replace("-", " ")
+          .replace(/\b\w/g, (char) =>
+            char.toUpperCase()
+          );
+
   const menuItems = [
-    { name: "Dashboard", icon: "▦" },
-    { name: "Students", icon: "♙" },
-    { name: "Faculty", icon: "♟" },
-    { name: "Academics", icon: "▤" },
-    { name: "Attendance", icon: "✓" },
-    { name: "Courses", icon: "▣" },
-    { name: "Examinations", icon: "▤" },
-    { name: "Reports", icon: "◫" },
+    { name: "Dashboard", icon: LayoutDashboard },
+    { name: "Students", icon: GraduationCap },
+    { name: "Faculty", icon: Users },
+    { name: "Academics", icon: BookOpen },
+    { name: "Attendance", icon: ClipboardCheck },
+    { name: "Courses", icon: BookOpen },
+    { name: "Examinations", icon: CalendarDays },
+    { name: "Reports", icon: BarChart3 },
   ];
 
- const handleMenuClick = (name) => {
-  setSidebarOpen(false);
+  const handleMenuClick = (name) => {
+    setSidebarOpen(false);
 
-  const routes = {
-    Dashboard: "/dashboard",
-    Students: "/students",
-    Faculty: "/faculty",
-    Academics: "/academics",
-    Attendance: "/attendance",
-    Courses: "/courses",
-    Examinations: "/examinations",
-    Reports: "/reports",
+    const routes = {
+      Dashboard: "/dashboard",
+      Students: "/students",
+      Faculty: "/faculty",
+      Academics: "/academics",
+      Attendance: "/attendance",
+      Courses: "/courses",
+      Examinations: "/examinations",
+      Reports: "/reports",
+    };
+
+    navigate(routes[name]);
   };
-
-  navigate(routes[name]);
-};
 
   const handleLogout = () => {
     navigate("/login");
@@ -340,84 +711,154 @@ const activeMenu =
   return (
     <div className="erp-dashboard">
 
-      {/* MOBILE OVERLAY */}
+      {/* Mobile Overlay */}
+
       {sidebarOpen && (
-        <div
+        <button
+          type="button"
           className="erp-overlay"
-          onClick={() => setSidebarOpen(false)}
+          aria-label="Close navigation"
+          onClick={() =>
+            setSidebarOpen(false)
+          }
         />
       )}
 
-      {/* SIDEBAR */}
+      {/* =================================================
+          SIDEBAR
+          ================================================= */}
+
       <aside
-  className={`erp-sidebar ${
-    sidebarOpen ? "sidebar-open" : ""
-  } ${sidebarCollapsed ? "sidebar-collapsed" : ""}`}
->
+        className={`erp-sidebar ${
+          sidebarOpen
+            ? "sidebar-open"
+            : ""
+        } ${
+          sidebarCollapsed
+            ? "sidebar-collapsed"
+            : ""
+        }`}
+      >
+
+        {/* Brand */}
 
         <div className="erp-brand">
-          <div className="erp-brand-logo">C</div>
+
+          <div className="erp-brand-logo">
+            C
+          </div>
 
           <div>
-            <h2>CampusCore<span>360</span></h2>
-            <p>Campus ERP</p>
+            <h2>
+              CampusCore<span>360</span>
+            </h2>
+
+            <p>
+              Campus ERP
+            </p>
           </div>
+
           <button
-  className="sidebar-toggle"
-  onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-  title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
->
-  {sidebarCollapsed ? "›" : "‹"}
-</button>
+            className="sidebar-toggle"
+            onClick={() =>
+              setSidebarCollapsed(
+                !sidebarCollapsed
+              )
+            }
+            title={
+              sidebarCollapsed
+                ? "Expand sidebar"
+                : "Collapse sidebar"
+            }
+            aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          >
+            {sidebarCollapsed
+              ? "›"
+              : "‹"}
+          </button>
+
         </div>
+
+        {/* Menu title */}
 
         <div className="erp-menu-title">
           MAIN MENU
         </div>
 
-        <nav className="erp-nav">
+        {/* Navigation */}
+
+        <nav className="erp-nav" aria-label="Main navigation">
 
           {menuItems.map((item) => (
             <button
-  key={item.name}
-  className={`erp-nav-item ${
-    activeMenu === item.name ? "active" : ""
-  }`}
-  onClick={() => handleMenuClick(item.name)}
-  data-tooltip={item.name}
->
+              key={item.name}
+              className={`erp-nav-item ${
+                activeMenu === item.name
+                  ? "active"
+                  : ""
+              }`}
+              onClick={() =>
+                handleMenuClick(
+                  item.name
+                )
+              }
+              aria-current={activeMenu === item.name ? "page" : undefined}
+              data-tooltip={item.name}
+            >
+
               <span className="erp-nav-icon">
-                {item.icon}
+                <item.icon size={18} strokeWidth={1.8} />
               </span>
 
-              <span>{item.name}</span>
+              <span>
+                {item.name}
+              </span>
+
             </button>
           ))}
 
         </nav>
 
+        {/* Bottom */}
+
         <div className="erp-sidebar-bottom">
 
           <button
-  className={`erp-nav-item ${
-    activeMenu === "Settings" ? "active" : ""
-  }`}
-  onClick={() => {
-    setSidebarOpen(false);
-    navigate("/settings");
-  }}
-  data-tooltip="Settings"
->
-            <span className="erp-nav-icon">⚙</span>
-            <span>Settings</span>
+            className={`erp-nav-item ${
+              activeMenu === "Settings"
+                ? "active"
+                : ""
+            }`}
+            onClick={() => {
+              setSidebarOpen(false);
+              navigate("/settings");
+            }}
+            data-tooltip="Settings"
+          >
+
+            <span className="erp-nav-icon">
+              <Settings size={18} />
+            </span>
+
+            <span>
+              Settings
+            </span>
+
           </button>
 
           <button
             className="erp-nav-item logout-item"
             onClick={handleLogout}
           >
-            <span className="erp-nav-icon">↪</span>
-            <span>Logout</span>
+
+            <span className="erp-nav-icon">
+              <LogOut size={18} />
+            </span>
+
+            <span>
+              Logout
+            </span>
+
           </button>
 
         </div>
@@ -425,105 +866,139 @@ const activeMenu =
       </aside>
 
 
-      {/* MAIN AREA */}
+      {/* =================================================
+          MAIN
+          ================================================= */}
+
       <main className="erp-main">
 
         {/* TOPBAR */}
+
         <header className="erp-topbar">
 
           <button
             className="erp-menu-toggle"
-            onClick={() => setSidebarOpen(!sidebarOpen)}
+            onClick={() =>
+              setSidebarOpen(
+                !sidebarOpen
+              )
+            }
+            aria-label="Open navigation"
           >
-            ☰
+            <Menu size={21} />
           </button>
 
-          <div className="erp-search">
-
-            <span>⌕</span>
-
-            <input
-              type="text"
-              placeholder="Search students, faculty, courses..."
-            />
-
-          </div>
+          <div className="workspace-search-wrap dashboard-search-wrap"><label className="erp-search workspace-search"><Search size={17} /><input type="text" aria-label="Search workspace pages" placeholder="Search workspace pages…" value={dashboardSearch} onChange={(event) => setDashboardSearch(event.target.value)} onKeyDown={(event) => { if (event.key === "Escape") setDashboardSearch(""); if (event.key === "Enter" && dashboardSearch.trim()) { const result = menuItems.find((item) => item.name.toLowerCase().includes(dashboardSearch.toLowerCase())); if (result) handleMenuClick(result.name); } }} /></label>{dashboardSearch.trim() && <div className="workspace-search-results">{menuItems.filter((item) => item.name.toLowerCase().includes(dashboardSearch.toLowerCase())).map((item) => <button key={item.name} onClick={() => { handleMenuClick(item.name); setDashboardSearch(""); }}><item.icon size={15} />{item.name}<span>→</span></button>)}{!menuItems.some((item) => item.name.toLowerCase().includes(dashboardSearch.toLowerCase())) && <span>No matching pages</span>}</div>}</div>
 
           <div className="erp-topbar-right">
 
             <button
               className="erp-icon-btn"
               title="Notifications"
-              onClick={() => alert("No new notifications.")}
+              aria-label="Notifications"
+              aria-expanded={topbarPanel === "notifications"}
+              onClick={() => setTopbarPanel((current) => current === "notifications" ? "" : "notifications")}
             >
-              🔔
-              <span className="notification-dot"></span>
+
+              <Bell size={18} />
+
+              <span className="notification-dot" />
+
             </button>
 
-            <div className="erp-profile">
+            {topbarPanel === "notifications" && <div className="dashboard-popover"><strong>You're all caught up</strong><span>New campus updates will appear here.</span></div>}
+
+            <button className="erp-profile dashboard-profile-button" aria-expanded={topbarPanel === "profile"} onClick={() => setTopbarPanel((current) => current === "profile" ? "" : "profile")}>
 
               <div className="erp-avatar">
                 A
               </div>
 
               <div className="erp-profile-info">
-                <strong>Admin</strong>
-                <span>Administrator</span>
+
+                <strong>
+                  Admin
+                </strong>
+
+                <span>
+                  Administrator
+                </span>
+
               </div>
 
               <span className="profile-arrow">⌄</span>
-
-            </div>
+            </button>
+            {topbarPanel === "profile" && <div className="dashboard-popover dashboard-profile-popover"><strong>Admin</strong><span>admin@campuscore.edu</span><button onClick={() => navigate("/settings")}>Account settings</button><button onClick={handleLogout}>Sign out</button></div>}
 
           </div>
 
         </header>
 
 
-        {/* CONTENT */}
+        {/* =================================================
+            CONTENT
+            ================================================= */}
+
         <section className="erp-content">
 
           {/* PAGE HEADER */}
+
           <div className="erp-page-header">
 
             <div>
-              <span className="erp-welcome">
-                OVERVIEW
-              </span>
 
-              <h1>Dashboard</h1>
+              <span className="erp-welcome">CAMPUS OVERVIEW · {new Intl.DateTimeFormat("en", { weekday: "long", month: "long", day: "numeric" }).format(new Date())}</span>
+
+              <h1>
+                Dashboard
+              </h1>
 
               <p>
-                Welcome back, Admin. Here's what's happening on your campus.
+                Good morning, Admin 👋 Here's what's happening across your campus today.
               </p>
+
             </div>
 
             <button
               className="erp-primary-btn"
-              onClick={() => alert("Add Student module coming soon.")}
+              onClick={() => navigate("/students", { state: { openAddStudent: true } })}
             >
-              <span>＋</span>
+
+              <Plus size={17} />
+
               Add Student
+
             </button>
 
           </div>
 
 
-          {/* STAT CARDS */}
+          {/* =================================================
+              STATISTICS
+              ================================================= */}
+
+          <div className="dashboard-demo-caption"><span className="dashboard-demo-dot" />Sample campus snapshot · Current academic session</div>
           <div className="erp-stats-grid">
+
+            {/* Students */}
 
             <button
               className="erp-stat-card"
-              onClick={() => handleMenuClick("Students")}
+              onClick={() =>
+                handleMenuClick(
+                  "Students"
+                )
+              }
             >
+
               <div className="erp-stat-top">
-                <div className="erp-stat-icon blue">
-                  ♙
-                </div>
+
+                <div className="erp-stat-icon blue"><GraduationCap size={20} /></div>
 
                 <span className="erp-stat-growth">
                   +8.2%
                 </span>
+
               </div>
 
               <div className="erp-stat-number">
@@ -535,24 +1010,39 @@ const activeMenu =
               </div>
 
               <div className="erp-stat-footer">
-                <span>Compared to last month</span>
-                <span>→</span>
+
+                <span>
+                  Compared to last month
+                </span>
+
+                <span>
+                  →
+                </span>
+
               </div>
+
             </button>
 
 
+            {/* Faculty */}
+
             <button
               className="erp-stat-card"
-              onClick={() => handleMenuClick("Faculty")}
+              onClick={() =>
+                handleMenuClick(
+                  "Faculty"
+                )
+              }
             >
+
               <div className="erp-stat-top">
-                <div className="erp-stat-icon purple">
-                  ♟
-                </div>
+
+                <div className="erp-stat-icon purple"><Users size={20} /></div>
 
                 <span className="erp-stat-growth">
                   +4.5%
                 </span>
+
               </div>
 
               <div className="erp-stat-number">
@@ -564,24 +1054,39 @@ const activeMenu =
               </div>
 
               <div className="erp-stat-footer">
-                <span>Compared to last month</span>
-                <span>→</span>
+
+                <span>
+                  Compared to last month
+                </span>
+
+                <span>
+                  →
+                </span>
+
               </div>
+
             </button>
 
 
+            {/* Courses */}
+
             <button
               className="erp-stat-card"
-              onClick={() => handleMenuClick("Courses")}
+              onClick={() =>
+                handleMenuClick(
+                  "Courses"
+                )
+              }
             >
+
               <div className="erp-stat-top">
-                <div className="erp-stat-icon orange">
-                  ▣
-                </div>
+
+                <div className="erp-stat-icon orange"><BookOpen size={20} /></div>
 
                 <span className="erp-stat-growth">
                   +12%
                 </span>
+
               </div>
 
               <div className="erp-stat-number">
@@ -593,24 +1098,39 @@ const activeMenu =
               </div>
 
               <div className="erp-stat-footer">
-                <span>Currently running</span>
-                <span>→</span>
+
+                <span>
+                  Currently running
+                </span>
+
+                <span>
+                  →
+                </span>
+
               </div>
+
             </button>
 
 
+            {/* Attendance */}
+
             <button
               className="erp-stat-card"
-              onClick={() => handleMenuClick("Attendance")}
+              onClick={() =>
+                handleMenuClick(
+                  "Attendance"
+                )
+              }
             >
+
               <div className="erp-stat-top">
-                <div className="erp-stat-icon green">
-                  ✓
-                </div>
+
+                <div className="erp-stat-icon green"><ClipboardCheck size={20} /></div>
 
                 <span className="erp-stat-growth">
                   +2.4%
                 </span>
+
               </div>
 
               <div className="erp-stat-number">
@@ -622,31 +1142,68 @@ const activeMenu =
               </div>
 
               <div className="erp-stat-footer">
-                <span>Overall campus</span>
-                <span>→</span>
+
+                <span>
+                  Overall campus
+                </span>
+
+                <span>
+                  →
+                </span>
+
               </div>
+
+            </button>
+
+            <button className="erp-stat-card" onClick={() => handleMenuClick("Examinations")}>
+              <div className="erp-stat-top"><div className="erp-stat-icon purple"><CalendarDays size={20} /></div><span className="erp-stat-growth">Next 14 days</span></div>
+              <div className="erp-stat-number">08</div><div className="erp-stat-label">Upcoming Exams</div><div className="erp-stat-footer"><span>Across 5 departments</span><span>→</span></div>
+            </button>
+
+            <button className="erp-stat-card" onClick={() => handleMenuClick("Reports")}>
+              <div className="erp-stat-top"><div className="erp-stat-icon orange"><ClipboardCheck size={20} /></div><span className="erp-stat-growth">Needs review</span></div>
+              <div className="erp-stat-number">12</div><div className="erp-stat-label">Pending Tasks</div><div className="erp-stat-footer"><span>Academic operations</span><span>→</span></div>
             </button>
 
           </div>
 
+          <section className="dashboard-analytics-grid">
+            <article className="erp-panel enrollment-panel"><div className="erp-panel-header"><div><h2>Student enrollment</h2><p>Enrollment trend · sample data</p></div><span className="analytics-period">Last 6 months <ChevronDown size={13} /></span></div><div className="enrollment-chart" role="img" aria-label="Student enrollment trend rises steadily from May through October"><div className="chart-y-labels"><span>2,600</span><span>2,400</span><span>2,200</span><span>2,000</span></div><div className="chart-plot"><div className="chart-gridlines"><i /><i /><i /><i /></div><svg viewBox="0 0 600 190" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="enrollment-fill" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stopColor="#4f7df3" stopOpacity=".22"/><stop offset="100%" stopColor="#4f7df3" stopOpacity="0"/></linearGradient></defs><path className="chart-area" d="M0 145 C50 135 68 119 120 125 S200 105 240 110 S310 80 360 92 S430 57 480 70 S550 35 600 42 V190 H0 Z"/><path className="chart-line" d="M0 145 C50 135 68 119 120 125 S200 105 240 110 S310 80 360 92 S430 57 480 70 S550 35 600 42"/><circle cx="600" cy="42" r="5" /></svg><div className="chart-x-labels"><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span></div></div></div><div className="chart-legend"><span><i />Student enrollment</span><strong>2,450 <small>students</small></strong></div></article>
+            <article className="erp-panel distribution-panel"><div className="erp-panel-header"><div><h2>Course distribution</h2><p>Enrollment by school · sample data</p></div><button className="erp-text-btn" onClick={() => navigate("/courses")}>View courses</button></div><div className="distribution-list"><div><span><i className="distribution-blue"/>Engineering</span><div><b style={{ width: "79%" }}/></div><strong>32%</strong></div><div><span><i className="distribution-purple"/>Computing</span><div><b style={{ width: "66%" }}/></div><strong>27%</strong></div><div><span><i className="distribution-cyan"/>Business</span><div><b style={{ width: "48%" }}/></div><strong>21%</strong></div><div><span><i className="distribution-orange"/>Sciences</span><div><b style={{ width: "39%" }}/></div><strong>20%</strong></div></div></article>
+          </section>
 
-          {/* MAIN GRID */}
+
+          {/* =================================================
+              MAIN GRID
+              ================================================= */}
+
           <div className="erp-main-grid">
 
+            {/* Attendance */}
 
-            {/* ATTENDANCE */}
             <div className="erp-panel attendance-panel">
 
               <div className="erp-panel-header">
 
                 <div>
-                  <h2>Attendance Overview</h2>
-                  <p>Current academic session</p>
+
+                  <h2>
+                    Attendance Overview
+                  </h2>
+
+                  <p>
+                    Current academic session
+                  </p>
+
                 </div>
 
                 <button
                   className="erp-small-btn"
-                  onClick={() => handleMenuClick("Attendance")}
+                  onClick={() =>
+                    handleMenuClick(
+                      "Attendance"
+                    )
+                  }
                 >
                   View Details
                 </button>
@@ -659,8 +1216,15 @@ const activeMenu =
                 <div className="attendance-circle">
 
                   <div>
-                    <strong>92.6%</strong>
-                    <span>Attendance</span>
+
+                    <strong>
+                      92.6%
+                    </strong>
+
+                    <span>
+                      Attendance
+                    </span>
+
                   </div>
 
                 </div>
@@ -669,25 +1233,55 @@ const activeMenu =
                 <div className="attendance-details">
 
                   <div className="attendance-item">
-                    <span className="attendance-dot present"></span>
+
+                    <span className="attendance-dot present" />
+
                     <div>
-                      <strong>Present</strong>
-                      <span>2,268 Students</span>
+
+                      <strong>
+                        Present
+                      </strong>
+
+                      <span>
+                        2,268 Students
+                      </span>
+
                     </div>
-                    <b>92.6%</b>
+
+                    <b>
+                      92.6%
+                    </b>
+
                   </div>
+
 
                   <div className="attendance-item">
-                    <span className="attendance-dot absent"></span>
+
+                    <span className="attendance-dot absent" />
+
                     <div>
-                      <strong>Absent</strong>
-                      <span>182 Students</span>
+
+                      <strong>
+                        Absent
+                      </strong>
+
+                      <span>
+                        182 Students
+                      </span>
+
                     </div>
-                    <b>7.4%</b>
+
+                    <b>
+                      7.4%
+                    </b>
+
                   </div>
 
+
                   <div className="attendance-progress">
-                    <div className="attendance-progress-fill"></div>
+
+                    <div className="attendance-progress-fill" />
+
                   </div>
 
                 </div>
@@ -697,62 +1291,144 @@ const activeMenu =
             </div>
 
 
-            {/* QUICK ACTIONS */}
+            {/* Quick Actions */}
+
             <div className="erp-panel">
 
               <div className="erp-panel-header">
 
                 <div>
-                  <h2>Quick Actions</h2>
-                  <p>Frequently used modules</p>
+
+                  <h2>
+                    Quick Actions
+                  </h2>
+
+                  <p>
+                    Frequently used modules
+                  </p>
+
                 </div>
 
               </div>
 
+
               <div className="quick-actions">
 
                 <button
-                  onClick={() => alert("Add Student module coming soon.")}
+                  onClick={() => navigate("/students", { state: { openAddStudent: true } })}
                 >
-                  <span className="quick-icon blue">＋</span>
+
+                  <span className="quick-icon blue">
+                    ＋
+                  </span>
+
                   <div>
-                    <strong>Add Student</strong>
-                    <small>Create student record</small>
+
+                    <strong>
+                      Add Student
+                    </strong>
+
+                    <small>
+                      Create student record
+                    </small>
+
                   </div>
-                  <span>→</span>
+
+                  <span>
+                    →
+                  </span>
+
                 </button>
 
-                <button
-                  onClick={() => alert("Faculty module coming soon.")}
-                >
-                  <span className="quick-icon purple">♟</span>
-                  <div>
-                    <strong>Manage Faculty</strong>
-                    <small>View faculty records</small>
-                  </div>
-                  <span>→</span>
-                </button>
 
                 <button
-                  onClick={() => alert("Course module coming soon.")}
+                  onClick={() => navigate("/faculty")}
                 >
-                  <span className="quick-icon orange">▣</span>
+
+                  <span className="quick-icon purple">
+                    ♟
+                  </span>
+
                   <div>
-                    <strong>Manage Courses</strong>
-                    <small>View active courses</small>
+
+                    <strong>
+                      Manage Faculty
+                    </strong>
+
+                    <small>
+                      View faculty records
+                    </small>
+
                   </div>
-                  <span>→</span>
+
+                  <span>
+                    →
+                  </span>
+
                 </button>
 
+
                 <button
-                  onClick={() => alert("Reports module coming soon.")}
+                  onClick={() => navigate("/courses")}
                 >
-                  <span className="quick-icon green">◫</span>
+
+                  <span className="quick-icon orange">
+                    ▣
+                  </span>
+
                   <div>
-                    <strong>Generate Report</strong>
-                    <small>Download campus report</small>
+
+                    <strong>
+                      Manage Courses
+                    </strong>
+
+                    <small>
+                      View active courses
+                    </small>
+
                   </div>
-                  <span>→</span>
+
+                  <span>
+                    →
+                  </span>
+
+                </button>
+
+
+                <button
+                  onClick={() => navigate("/reports")}
+                >
+
+                  <span className="quick-icon green">
+                    ◫
+                  </span>
+
+                  <div>
+
+                    <strong>
+                      Generate Report
+                    </strong>
+
+                    <small>
+                      Download campus report
+                    </small>
+
+                  </div>
+
+                  <span>
+                    →
+                  </span>
+
+                </button>
+
+                <button onClick={() => navigate("/attendance")}>
+                  <span className="quick-icon blue"><ClipboardCheck size={18} /></span>
+                  <div><strong>Mark Attendance</strong><small>Open today's class register</small></div><span>→</span>
+                </button>
+
+                <button onClick={() => navigate("/examinations")}>
+                  <span className="quick-icon purple"><CalendarDays size={18} /></span>
+                  <div><strong>Schedule Exam</strong><small>Manage upcoming assessments</small></div><span>→</span>
                 </button>
 
               </div>
@@ -762,23 +1438,33 @@ const activeMenu =
           </div>
 
 
-          {/* BOTTOM GRID */}
+          {/* =================================================
+              BOTTOM GRID
+              ================================================= */}
+
           <div className="erp-bottom-grid">
 
+            {/* Recent Activities */}
 
-            {/* RECENT ACTIVITIES */}
             <div className="erp-panel">
 
               <div className="erp-panel-header">
 
                 <div>
-                  <h2>Recent Activities</h2>
-                  <p>Latest campus updates</p>
+
+                  <h2>
+                    Recent Activities
+                  </h2>
+
+                  <p>
+                    Latest campus updates
+                  </p>
+
                 </div>
 
                 <button
                   className="erp-text-btn"
-                  onClick={() => alert("Showing all activities.")}
+                  onClick={() => navigate("/reports")}
                 >
                   View All
                 </button>
@@ -795,6 +1481,7 @@ const activeMenu =
                   </div>
 
                   <div>
+
                     <strong>
                       24 new students registered
                     </strong>
@@ -802,6 +1489,7 @@ const activeMenu =
                     <span>
                       Student Management • 15 minutes ago
                     </span>
+
                   </div>
 
                 </div>
@@ -814,6 +1502,7 @@ const activeMenu =
                   </div>
 
                   <div>
+
                     <strong>
                       Faculty profile updated
                     </strong>
@@ -821,6 +1510,7 @@ const activeMenu =
                     <span>
                       Faculty Management • 42 minutes ago
                     </span>
+
                   </div>
 
                 </div>
@@ -833,6 +1523,7 @@ const activeMenu =
                   </div>
 
                   <div>
+
                     <strong>
                       New course added: Data Science
                     </strong>
@@ -840,6 +1531,7 @@ const activeMenu =
                     <span>
                       Academics • 1 hour ago
                     </span>
+
                   </div>
 
                 </div>
@@ -852,6 +1544,7 @@ const activeMenu =
                   </div>
 
                   <div>
+
                     <strong>
                       Attendance report generated
                     </strong>
@@ -859,6 +1552,7 @@ const activeMenu =
                     <span>
                       Reports • 2 hours ago
                     </span>
+
                   </div>
 
                 </div>
@@ -868,14 +1562,22 @@ const activeMenu =
             </div>
 
 
-            {/* SYSTEM STATUS */}
+            {/* System Status */}
+
             <div className="erp-panel system-panel">
 
               <div className="erp-panel-header">
 
                 <div>
-                  <h2>System Status</h2>
-                  <p>CampusCore360 services</p>
+
+                  <h2>
+                    System Status
+                  </h2>
+
+                  <p>
+                    CampusCore360 services
+                  </p>
+
                 </div>
 
                 <span className="system-online">
@@ -888,27 +1590,59 @@ const activeMenu =
               <div className="system-status-list">
 
                 <div>
-                  <span>Database</span>
-                  <b>Operational</b>
-                  <i></i>
+
+                  <span>
+                    Database
+                  </span>
+
+                  <b>
+                    Operational
+                  </b>
+
+                  <i />
+
                 </div>
 
                 <div>
-                  <span>Authentication</span>
-                  <b>Operational</b>
-                  <i></i>
+
+                  <span>
+                    Authentication
+                  </span>
+
+                  <b>
+                    Operational
+                  </b>
+
+                  <i />
+
                 </div>
 
                 <div>
-                  <span>Student Portal</span>
-                  <b>Operational</b>
-                  <i></i>
+
+                  <span>
+                    Student Portal
+                  </span>
+
+                  <b>
+                    Operational
+                  </b>
+
+                  <i />
+
                 </div>
 
                 <div>
-                  <span>API Services</span>
-                  <b>Operational</b>
-                  <i></i>
+
+                  <span>
+                    API Services
+                  </span>
+
+                  <b>
+                    Operational
+                  </b>
+
+                  <i />
+
                 </div>
 
               </div>
@@ -922,8 +1656,10 @@ const activeMenu =
           </div>
 
 
-          {/* FOOTER */}
+          {/* Footer */}
+
           <footer className="erp-footer">
+
             <span>
               © 2026 CampusCore360
             </span>
@@ -931,6 +1667,7 @@ const activeMenu =
             <span>
               Intelligent Campus ERP
             </span>
+
           </footer>
 
         </section>
@@ -942,105 +1679,158 @@ const activeMenu =
 }
 
 
-// ================= APP =================
+/* =========================================================
+   APP ROUTES
+   ========================================================= */
 
 function App() {
   return (
     <BrowserRouter>
 
+      <MotionConfig reducedMotion="user">
       <Routes>
+
+        {/* Home */}
 
         <Route
           path="/"
-          element={<Navigate to="/login" replace />}
+          element={
+            <Navigate
+              to="/login"
+              replace
+            />
+          }
         />
+
+        {/* Login */}
 
         <Route
           path="/login"
-          element={<Login />}
+          element={
+            <Login />
+          }
         />
+
+        {/* Dashboard */}
 
         <Route
           path="/dashboard"
-          element={<Dashboard />}
+          element={
+            <Dashboard />
+          }
         />
-     <Route
-  path="/students"
-  element={<Students />}
-/>
 
-<Route
-  path="/faculty"
-  element={
-    <ModulePage
-      title="Faculty"
-      description="Manage faculty profiles, departments and information."
-    />
-  }
-/>
+        {/* Students */}
 
-<Route
-  path="/academics"
-  element={
-    <ModulePage
-      title="Academics"
-      description="Manage academic programs, semesters and activities."
-    />
-  }
-/>
+        <Route
+          path="/students"
+          element={
+            <Workspace activePage="Students">
+              <Students />
+            </Workspace>
+          }
+        />
 
-<Route
-  path="/attendance"
-  element={
-    <ModulePage
-      title="Attendance"
-      description="Track and manage student attendance."
-    />
-  }
-/>
+        {/* Faculty */}
 
-<Route
-  path="/courses"
-  element={
-    <ModulePage
-      title="Courses"
-      description="Manage courses, subjects and course schedules."
-    />
-  }
-/>
+        <Route
+          path="/faculty"
+          element={
+            <ModulePage
+              title="Faculty"
+              description="Manage faculty profiles, departments and information."
+            />
+          }
+        />
 
-<Route
-  path="/examinations"
-  element={
-    <ModulePage
-      title="Examinations"
-      description="Manage examinations, schedules and results."
-    />
-  }
-/>
+        {/* Academics */}
 
-<Route
-  path="/reports"
-  element={
-    <ModulePage
-      title="Reports"
-      description="View and generate campus management reports."
-    />
-  }
-/>
+        <Route
+          path="/academics"
+          element={
+            <ModulePage
+              title="Academics"
+              description="Manage academic programs, semesters and activities."
+            />
+          }
+        />
 
-<Route
-  path="/settings"
-  element={
-    <ModulePage
-      title="Settings"
-      description="Manage CampusCore360 system settings."
-    />
-  }
-/>
-  </Routes>
+        {/* Attendance */}
+
+        <Route
+          path="/attendance"
+          element={
+            <ModulePage
+              title="Attendance"
+              description="Track and manage student attendance."
+            />
+          }
+        />
+
+        {/* Courses */}
+
+        <Route
+          path="/courses"
+          element={
+            <ModulePage
+              title="Courses"
+              description="Manage courses, subjects and course schedules."
+            />
+          }
+        />
+
+        {/* Examinations */}
+
+        <Route
+          path="/examinations"
+          element={
+            <ModulePage
+              title="Examinations"
+              description="Manage examinations, schedules and results."
+            />
+          }
+        />
+
+        {/* Reports */}
+
+        <Route
+          path="/reports"
+          element={
+            <ModulePage
+              title="Reports"
+              description="View and generate campus management reports."
+            />
+          }
+        />
+
+        {/* Settings */}
+
+        <Route
+          path="/settings"
+          element={
+            <ModulePage
+              title="Settings"
+              description="Manage CampusCore360 system settings."
+            />
+          }
+        />
+
+        {/* Unknown URL */}
+
+        <Route
+          path="*"
+          element={
+            <Navigate
+              to="/login"
+              replace
+            />
+          }
+        />
+
+      </Routes>
+      </MotionConfig>
+
     </BrowserRouter>
-    
   );
 }
 
