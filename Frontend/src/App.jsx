@@ -42,6 +42,8 @@ function Login() {
 
   return (
     <div className="login-page">
+      <div className="login-ambient login-ambient-one" aria-hidden="true" />
+      <div className="login-ambient login-ambient-two" aria-hidden="true" />
 
       {/* LEFT BRANDING SECTION */}
 

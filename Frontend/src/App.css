@@ -1743,3 +1743,570 @@ body {
 
   z-index: 200;
 }
+
+/* ================= MOTION & POLISH ================= */
+
+.login-page {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 82% 12%, rgba(96, 165, 250, 0.12), transparent 30%),
+    linear-gradient(135deg, #f7f9ff 0%, #eef3fb 100%);
+}
+
+.login-ambient {
+  position: absolute;
+  z-index: 0;
+  width: 250px;
+  aspect-ratio: 1;
+  border: 1px solid rgba(82, 130, 230, 0.12);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: ambient-drift 13s ease-in-out infinite alternate;
+}
+
+.login-ambient::before,
+.login-ambient::after {
+  position: absolute;
+  content: "";
+  inset: 18px;
+  border: 1px solid rgba(82, 130, 230, 0.1);
+  border-radius: inherit;
+}
+
+.login-ambient::after {
+  inset: 38px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.06), transparent 68%);
+}
+
+.login-ambient-one {
+  top: -105px;
+  right: 10%;
+}
+
+.login-ambient-two {
+  width: 170px;
+  bottom: -90px;
+  left: 36%;
+  animation-delay: -5s;
+  animation-duration: 16s;
+}
+
+.login-brand-section {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 82% 78%, rgba(96, 165, 250, 0.22), transparent 28%),
+    radial-gradient(circle at 15% 20%, rgba(59, 130, 246, 0.28), transparent 35%),
+    linear-gradient(145deg, #10275d 0%, #1746a0 56%, #2563eb 100%);
+}
+
+.login-brand-section::after {
+  position: absolute;
+  content: "";
+  width: 390px;
+  height: 390px;
+  right: -220px;
+  top: 17%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
+  box-shadow: 0 0 0 28px rgba(255, 255, 255, 0.025), 0 0 0 58px rgba(255, 255, 255, 0.02);
+  animation: ring-breathe 7s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.brand-content,
+.brand-footer {
+  position: relative;
+  z-index: 1;
+}
+
+.brand-content > * {
+  animation: rise-in 700ms both;
+}
+
+.brand-content > :nth-child(2) { animation-delay: 90ms; }
+.brand-content > :nth-child(3) { animation-delay: 150ms; }
+.brand-content > :nth-child(4) { animation-delay: 210ms; }
+.brand-content > :nth-child(5) { animation-delay: 290ms; }
+
+.brand-logo-large {
+  background: linear-gradient(145deg, rgba(255,255,255,.24), rgba(255,255,255,.08));
+  box-shadow: 0 14px 35px rgba(4, 17, 52, 0.2), inset 0 1px 0 rgba(255,255,255,.25);
+  animation: rise-in 700ms both, logo-float 5s ease-in-out 900ms infinite !important;
+}
+
+.feature-item {
+  transition: transform 220ms ease;
+}
+
+.feature-item:hover {
+  transform: translateX(5px);
+}
+
+.feature-icon {
+  flex-shrink: 0;
+  box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.035);
+  transition: transform 220ms ease, background 220ms ease;
+}
+
+.feature-item:hover .feature-icon {
+  transform: scale(1.08) rotate(-7deg);
+  background: rgba(255, 255, 255, 0.24);
+}
+
+.login-section {
+  position: relative;
+  z-index: 1;
+}
+
+.login-card {
+  border-color: rgba(218, 226, 239, 0.9);
+  box-shadow: 0 28px 75px rgba(25, 48, 91, 0.12), 0 4px 14px rgba(25, 48, 91, 0.04);
+  animation: card-arrive 800ms cubic-bezier(.2,.8,.2,1) both;
+  transition: box-shadow 300ms ease, transform 300ms ease;
+}
+
+.login-card:hover {
+  box-shadow: 0 32px 85px rgba(25, 48, 91, 0.15), 0 4px 14px rgba(25, 48, 91, 0.04);
+}
+
+.welcome-badge {
+  box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.06);
+  animation: badge-glow 3.5s ease-in-out infinite;
+}
+
+.form-group,
+.login-options,
+.login-btn,
+.security-note,
+.login-footer {
+  animation: rise-in 650ms both;
+}
+
+.login-card form .form-group:nth-child(1) { animation-delay: 170ms; }
+.login-card form .form-group:nth-child(2) { animation-delay: 230ms; }
+.login-options { animation-delay: 290ms; }
+.login-btn { animation-delay: 340ms; }
+.security-note { animation-delay: 390ms; }
+.login-footer { animation-delay: 440ms; }
+
+.input-wrapper input {
+  transition: border-color 220ms ease, background 220ms ease, box-shadow 220ms ease, transform 220ms ease;
+}
+
+.input-wrapper input:focus {
+  transform: translateY(-1px);
+}
+
+.login-btn {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(105deg, #2563eb, #3478f6 55%, #1d4ed8);
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.18);
+}
+
+.login-btn::before {
+  position: absolute;
+  content: "";
+  top: -40%;
+  left: -35%;
+  width: 25%;
+  height: 180%;
+  transform: rotate(22deg);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.26), transparent);
+  transition: left 600ms ease;
+}
+
+.login-btn:hover::before {
+  left: 120%;
+}
+
+.login-btn .arrow {
+  transition: transform 220ms ease;
+}
+
+.login-btn:hover .arrow {
+  transform: translateX(4px);
+}
+
+.erp-dashboard {
+  background:
+    radial-gradient(ellipse at 91% 0%, rgba(219, 231, 255, 0.4), transparent 26%),
+    #f5f7fb;
+}
+
+.erp-sidebar {
+  box-shadow: 8px 0 28px rgba(24, 39, 75, 0.025);
+  transition: width 280ms cubic-bezier(.2,.8,.2,1), transform 280ms ease, box-shadow 280ms ease;
+}
+
+.erp-brand-logo {
+  background: linear-gradient(145deg, #3b82f6, #2455d6);
+  box-shadow: 0 7px 16px rgba(40, 100, 232, 0.22);
+  transition: transform 220ms ease, box-shadow 220ms ease;
+}
+
+.erp-brand-logo:hover {
+  transform: rotate(-7deg) scale(1.06);
+  box-shadow: 0 10px 20px rgba(40, 100, 232, 0.28);
+}
+
+.erp-nav-item {
+  transition: background 180ms ease, color 180ms ease, transform 180ms ease, padding 280ms ease;
+}
+
+.erp-nav-item:hover {
+  transform: translateX(3px);
+}
+
+.erp-nav-icon {
+  transition: transform 180ms ease;
+}
+
+.erp-nav-item:hover .erp-nav-icon {
+  transform: scale(1.13);
+}
+
+.erp-main {
+  animation: dashboard-arrive 650ms ease both;
+}
+
+.erp-topbar {
+  box-shadow: 0 4px 18px rgba(30, 48, 85, 0.025);
+}
+
+.erp-avatar {
+  background: linear-gradient(145deg, #4385fa, #2358d7);
+  box-shadow: 0 5px 13px rgba(40, 100, 232, 0.22);
+  transition: transform 220ms ease;
+}
+
+.erp-profile:hover .erp-avatar {
+  transform: scale(1.07) rotate(4deg);
+}
+
+.notification-dot {
+  animation: notification-pulse 2s ease-out infinite;
+}
+
+.erp-page-header {
+  animation: rise-in 550ms 80ms both;
+}
+
+.erp-primary-btn {
+  background: linear-gradient(105deg, #2864e8, #3978f4);
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.erp-stats-grid .erp-stat-card,
+.erp-main-grid > *,
+.erp-bottom-grid > * {
+  animation: rise-in 600ms both;
+}
+
+.erp-stats-grid .erp-stat-card:nth-child(1) { animation-delay: 120ms; }
+.erp-stats-grid .erp-stat-card:nth-child(2) { animation-delay: 190ms; }
+.erp-stats-grid .erp-stat-card:nth-child(3) { animation-delay: 260ms; }
+.erp-stats-grid .erp-stat-card:nth-child(4) { animation-delay: 330ms; }
+.erp-main-grid > :nth-child(1) { animation-delay: 390ms; }
+.erp-main-grid > :nth-child(2) { animation-delay: 460ms; }
+.erp-bottom-grid > :nth-child(1) { animation-delay: 520ms; }
+.erp-bottom-grid > :nth-child(2) { animation-delay: 590ms; }
+
+.erp-stat-card {
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 3px 12px rgba(31, 49, 87, 0.025);
+  transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+}
+
+.erp-stat-card::after {
+  position: absolute;
+  content: "";
+  width: 110px;
+  height: 110px;
+  top: -75px;
+  right: -65px;
+  border-radius: 50%;
+  background: rgba(59, 130, 246, 0.045);
+  transition: transform 350ms ease;
+}
+
+.erp-stat-card:hover::after {
+  transform: scale(2.5);
+}
+
+.erp-stat-icon {
+  transition: transform 240ms ease;
+}
+
+.erp-stat-card:hover .erp-stat-icon {
+  transform: translateY(-2px) rotate(-5deg) scale(1.05);
+}
+
+.erp-panel {
+  box-shadow: 0 4px 16px rgba(31, 49, 87, 0.025);
+  transition: border-color 220ms ease, box-shadow 220ms ease;
+}
+
+.erp-panel:hover {
+  border-color: #dce4f2;
+  box-shadow: 0 8px 24px rgba(31, 49, 87, 0.05);
+}
+
+.attendance-circle {
+  animation: circle-in 900ms 420ms cubic-bezier(.2,.8,.2,1) both;
+}
+
+.attendance-progress-fill {
+  transform-origin: left;
+  animation: progress-in 1000ms 650ms cubic-bezier(.2,.8,.2,1) both;
+}
+
+.quick-actions button {
+  transition: background 180ms ease, transform 180ms ease;
+}
+
+.quick-actions button:hover {
+  transform: translateX(3px);
+}
+
+.quick-icon {
+  transition: transform 200ms ease;
+}
+
+.quick-actions button:hover .quick-icon {
+  transform: scale(1.08) rotate(-5deg);
+}
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes card-arrive {
+  from { opacity: 0; transform: translateY(18px) scale(.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes dashboard-arrive {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes ambient-drift {
+  from { transform: translate3d(0, 0, 0) rotate(0deg); }
+  to { transform: translate3d(-18px, 22px, 0) rotate(12deg); }
+}
+
+@keyframes ring-breathe {
+  0%, 100% { transform: scale(.96); opacity: .55; }
+  50% { transform: scale(1.04); opacity: 1; }
+}
+
+@keyframes logo-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes badge-glow {
+  0%, 100% { box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.06); }
+  50% { box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.1), 0 0 18px rgba(37, 99, 235, 0.09); }
+}
+
+@keyframes notification-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(40, 100, 232, 0.32); }
+  70%, 100% { box-shadow: 0 0 0 7px rgba(40, 100, 232, 0); }
+}
+
+@keyframes circle-in {
+  from { opacity: 0; transform: scale(.88) rotate(-18deg); }
+  to { opacity: 1; transform: scale(1) rotate(0); }
+}
+
+@keyframes progress-in {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@media (max-width: 768px) {
+  .login-brand-section::after { right: -270px; }
+  .login-ambient-one { right: -100px; }
+  .erp-nav-item:hover { transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High-contrast portal styling for compact screens, where the split brand
+   panel is intentionally hidden by the existing responsive layout. */
+@media (max-width: 900px) {
+  .login-page {
+    min-height: 100vh;
+    background:
+      radial-gradient(circle at 12% 14%, rgba(96, 165, 250, 0.32), transparent 26%),
+      radial-gradient(circle at 91% 86%, rgba(129, 140, 248, 0.28), transparent 30%),
+      linear-gradient(145deg, #0a1736 0%, #123879 54%, #1e55bd 100%);
+  }
+
+  .login-ambient {
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .login-ambient::before {
+    border-color: rgba(255, 255, 255, 0.14);
+  }
+
+  .login-ambient::after {
+    background: radial-gradient(circle, rgba(147, 197, 253, 0.16), transparent 68%);
+  }
+
+  .login-section {
+    padding: 38px 24px;
+  }
+
+  .login-card {
+    position: relative;
+    overflow: hidden;
+    padding: 43px;
+    border: 1px solid rgba(255, 255, 255, 0.72);
+    border-radius: 23px;
+    box-shadow: 0 34px 90px rgba(3, 13, 36, 0.34), 0 4px 15px rgba(4, 20, 54, 0.18);
+  }
+
+  .login-card::before {
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #60a5fa, #8b5cf6, #38bdf8);
+    background-size: 200% 100%;
+    animation: accent-flow 5s linear infinite;
+  }
+
+  .mobile-logo {
+    background: linear-gradient(145deg, #4385fa, #2358d7);
+    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.24), inset 0 1px 0 rgba(255,255,255,.3);
+    animation: logo-float 5s ease-in-out infinite;
+  }
+
+  .login-btn {
+    height: 54px;
+    border-radius: 11px;
+  }
+}
+
+/* The dashboard greeting becomes a clear visual anchor above the data cards. */
+.erp-page-header {
+  position: relative;
+  overflow: hidden;
+  min-height: 164px;
+  align-items: center;
+  padding: 27px 30px;
+  margin-bottom: 23px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 86% 10%, rgba(147, 197, 253, 0.24), transparent 22%),
+    linear-gradient(112deg, #102653 0%, #1749a2 58%, #2864e8 100%);
+  box-shadow: 0 14px 30px rgba(24, 63, 143, 0.16);
+}
+
+.erp-page-header::after {
+  position: absolute;
+  content: "";
+  width: 210px;
+  height: 210px;
+  right: 130px;
+  top: -135px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 50%;
+  box-shadow: 0 0 0 22px rgba(255, 255, 255, 0.035), 0 0 0 46px rgba(255, 255, 255, 0.025);
+  pointer-events: none;
+}
+
+.erp-page-header > div,
+.erp-page-header > button {
+  position: relative;
+  z-index: 1;
+}
+
+.erp-page-header .erp-welcome {
+  color: #b8d3ff;
+}
+
+.erp-page-header h1 {
+  color: white;
+  font-size: 34px;
+}
+
+.erp-page-header p {
+  color: rgba(235, 243, 255, 0.78);
+}
+
+.erp-page-header .erp-primary-btn {
+  color: #1749a2;
+  background: #fff;
+  box-shadow: 0 8px 20px rgba(3, 15, 40, 0.18);
+}
+
+.erp-page-header .erp-primary-btn:hover {
+  background: #eff6ff;
+  box-shadow: 0 10px 24px rgba(3, 15, 40, 0.24);
+}
+
+@keyframes accent-flow {
+  from { background-position: 0% 50%; }
+  to { background-position: 200% 50%; }
+}
+
+@media (max-width: 768px) {
+  .login-section {
+    padding: 24px 17px;
+  }
+
+  .login-card {
+    padding: 32px 25px;
+  }
+
+  .erp-page-header {
+    min-height: 0;
+    padding: 23px 20px;
+  }
+
+  .erp-page-header h1 {
+    font-size: 29px;
+  }
+
+  .erp-page-header::after {
+    right: -100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-section {
+    padding: 16px 12px;
+  }
+
+  .login-card {
+    padding: 28px 21px;
+    border-radius: 19px;
+  }
+
+  .mobile-brand {
+    margin-bottom: 25px;
+  }
+}

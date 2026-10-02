@@ -42,7 +42,7 @@ const [newStudent, setNewStudent] = useState({
     {
       id: "STU004",
       name: "Babulal Yadav",
-      email: "babulal@campuscore360.com",
+      email: "Junaid@campuscore360.com",
       course: "B.Tech",
       year: "3rd Year",
       status: "Inactive",
