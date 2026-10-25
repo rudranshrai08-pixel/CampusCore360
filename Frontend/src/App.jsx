@@ -676,12 +676,14 @@ function Dashboard() {
   const activeMenu =
     location.pathname === "/dashboard"
       ? "Dashboard"
-      : location.pathname
-          .replace("/", "")
-          .replace("-", " ")
-          .replace(/\b\w/g, (char) =>
-            char.toUpperCase()
-          );
+      : location.pathname === "/student-success"
+        ? "Student Success AI"
+        : location.pathname
+            .replace("/", "")
+            .replace("-", " ")
+            .replace(/\b\w/g, (char) =>
+              char.toUpperCase()
+            );
 
   const menuItems = [
     { name: "Dashboard", icon: LayoutDashboard },
@@ -1705,7 +1707,7 @@ function App() {
           path="/"
           element={
             <Navigate
-              to="/login"
+              to="/student-success"
               replace
             />
           }
