@@ -133,8 +133,7 @@ const saveStudent = () => {
           <Plus size={16} /> Add Student
         </button>
       </div>
-      <div className="students-demo-note"><span />Demo student records · Changes save automatically in this browser</div>
-      <div className="students-summary-grid"><div><span>Enrolled students</span><strong>{students.length}</strong><small>In this demo directory</small></div><div><span>Active enrollment</span><strong>{students.filter((student) => student.status === "Active").length}</strong><small>Across all programs</small></div><div><span>Average attendance</span><strong>{students.length ? `${Math.round(students.reduce((sum, student) => sum + Number.parseInt(student.attendance || "0", 10), 0) / students.length)}%` : "—"}</strong><small>Sample attendance data</small></div><div><span>Average performance</span><strong>{students.length ? `${Math.round(students.reduce((sum, student) => sum + Number(student.performance ?? 70), 0) / students.length)}%` : "—"}</strong><small>Used by Student Success AI</small></div></div>
+      <div className="students-summary-grid"><div><span>Enrolled students</span><strong>{students.length}</strong><small>Across all programs</small></div><div><span>Active enrollment</span><strong>{students.filter((student) => student.status === "Active").length}</strong><small>Currently enrolled</small></div><div><span>Average attendance</span><strong>{students.length ? `${Math.round(students.reduce((sum, student) => sum + Number.parseInt(student.attendance || "0", 10), 0) / students.length)}%` : "—"}</strong><small>Across recorded students</small></div><div><span>Average performance</span><strong>{students.length ? `${Math.round(students.reduce((sum, student) => sum + Number(student.performance ?? 70), 0) / students.length)}%` : "—"}</strong><small>Used by Student Success AI</small></div></div>
       {showForm && (
   <div className="student-form-card">
 

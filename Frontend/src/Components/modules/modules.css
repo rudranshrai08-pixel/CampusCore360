@@ -79,9 +79,6 @@
 .module-secondary-btn:hover, .module-export-btn:hover { border-color: #bfd2f8; color: #1d4ed8; background: #f8fbff; }
 .module-danger-btn { color: white; background: #dc3d4b; }
 .module-danger-btn:hover { background: #c82e3d; }
-.module-demo-notice { display: flex; align-items: center; gap: 9px; margin: 0 0 18px; padding: 10px 13px; border: 1px solid #dce8ff; border-radius: 10px; background: #f2f7ff; color: #5d6c82; font-size: 11px; }
-.module-demo-notice svg { flex: 0 0 auto; color: #3973db; }
-.module-demo-notice strong { color: #355c9c; }
 .academic-tabs { display: flex; gap: 5px; width: fit-content; margin: 0 0 15px; padding: 4px; border: 1px solid #e6ebf2; border-radius: 11px; background: #fff; }
 .academic-tabs button { min-height: 32px; padding: 0 13px; border: 0; border-radius: 8px; color: #718096; background: transparent; font: inherit; font-size: 10px; font-weight: 650; cursor: pointer; }
 .academic-tabs button.selected { color: #1d4ed8; background: #edf4ff; box-shadow: 0 1px 3px rgba(15, 23, 42, .06); }
@@ -277,7 +274,6 @@
   .module-stats-grid { grid-template-columns: 1fr 1fr; }
   .module-stat-card > strong { font-size: 18px; }
   .module-stat-label { min-height: 26px; line-height: 1.3; }
-  .module-demo-notice { align-items: flex-start; line-height: 1.55; }
   .academic-tabs { width: 100%; overflow-x: auto; }
   .academic-tabs button { flex: 0 0 auto; }
   .module-table-heading { align-items: flex-start; }

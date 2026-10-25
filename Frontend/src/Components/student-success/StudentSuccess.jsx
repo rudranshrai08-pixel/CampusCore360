@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Activity, ArrowDownRight, ArrowRight, CheckCircle2, CircleHelp, Download, Mail, Search, Settings2, ShieldCheck, Sparkles, TrendingDown, TrendingUp, Users, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Workspace } from "../modules/ModulePage.jsx";
@@ -22,6 +22,7 @@ function StudentSuccess() {
   const [showSettings, setShowSettings] = useState(false);
   const [showMethod, setShowMethod] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
+  const studentSectionRef = useRef(null);
 
   useEffect(() => {
     try {
@@ -77,17 +78,17 @@ function StudentSuccess() {
           </div>
         </div>
 
-        <div className="success-transparency"><ShieldCheck size={15} /><span><strong>Transparent support signals</strong> · Insights use attendance and assessment averages against your college criteria. Review each suggestion before contacting a student.</span></div>
+        <div className="success-transparency"><ShieldCheck size={15} /><span><strong>Student support insights</strong> · Insights use attendance and assessment averages against your college criteria. Review each suggestion before contacting a student.</span></div>
 
         <AnimatePresence>
           {showMethod && <motion.section className="success-method-panel" initial={{ opacity: 0, height: 0, y: -8 }} animate={{ opacity: 1, height: "auto", y: 0 }} exit={{ opacity: 0, height: 0, y: -8 }}>
-            <div className="success-method-heading"><span className="success-method-icon"><Activity size={17} /></span><div><span className="success-section-kicker">EXPLAINABLE DEMO ENGINE</span><h2>How a student insight is created</h2><p>The current prototype uses a transparent scoring and recommendation flow in the browser.</p></div></div>
+            <div className="success-method-heading"><span className="success-method-icon"><Activity size={17} /></span><div><span className="success-section-kicker">HOW INSIGHTS ARE CREATED</span><h2>How a student insight is created</h2><p>Attendance, performance and progress are compared with college criteria in the browser.</p></div></div>
             <div className="success-method-steps">
               <article><span>01</span><strong>Read the signals</strong><p>Compare attendance and average marks with the college criteria; compare this average with the previous one.</p></article>
               <article><span>02</span><strong>Score the concern</strong><p>Combine the threshold gaps and a falling trend into a relative support score. It is not a probability or diagnosis.</p></article>
               <article><span>03</span><strong>Suggest a next step</strong><p>Choose supportive guidance and create a message preview using the student’s name and actual recorded figures.</p></article>
             </div>
-            <div className="success-method-footnote"><strong>Demo weights:</strong> attendance gap 45% · performance gap 35% · performance trend 20%. This prototype is rules-based; it does not call an external AI model.</div>
+            <div className="success-method-footnote"><strong>Scoring weights:</strong> attendance gap 45% · performance gap 35% · performance trend 20%. Suggestions are rules-based and should be reviewed by staff.</div>
           </motion.section>}
         </AnimatePresence>
 
@@ -110,14 +111,14 @@ function StudentSuccess() {
         <section className="success-insight-banner">
           <div className="success-insight-mark"><Sparkles size={20} /></div>
           <div className="success-insight-copy">
-            <span className="success-section-kicker">THIS SESSION'S SNAPSHOT</span>
+            <span className="success-section-kicker">STUDENT SUPPORT SUMMARY</span>
             <h2>{supportStudents.length ? `${supportStudents.length} student${supportStudents.length === 1 ? "" : "s"} could use a timely check-in` : "No students are below the current criteria"}</h2>
             <p>{supportStudents.length ? "Start with students who have both attendance and performance concerns. Each profile includes a tailored message and a practical study suggestion." : "Keep reviewing attendance and performance as new records are added."}</p>
           </div>
-          {supportStudents.length > 0 && <button onClick={() => { setFilter("Needs support"); setSearch(""); }}>Review students <ArrowRight size={15} /></button>}
+          {supportStudents.length > 0 && <button onClick={() => { setFilter("Needs support"); setSearch(""); studentSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }); }}>Review students <ArrowRight size={15} /></button>}
         </section>
 
-        <section className="success-student-section">
+        <section className="success-student-section" ref={studentSectionRef}>
           <div className="success-list-heading">
             <div><span className="success-section-kicker">INDIVIDUAL FOLLOW-UP</span><h2>Student analysis</h2><p>Each recommendation is based on the student’s recorded progress.</p></div>
             <label className="success-search"><Search size={16} /><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search student or branch" aria-label="Search students or branches" /></label>
@@ -143,7 +144,6 @@ function StudentSuccess() {
             {visibleStudents.length === 0 && <div className="success-empty"><span><Search size={19} /></span><strong>No students match this view</strong><p>Try another filter or search term.</p></div>}
           </div>
         </section>
-        <p className="success-data-note">Demo student records and criteria save automatically in this browser, including after refresh. A live campus database can replace this local storage in a future phase.</p>
       </div>
 
       <AnimatePresence>{selectedStudent && <MessageDialog student={selectedStudent} thresholds={thresholds} onClose={() => setSelectedStudent(null)} />}</AnimatePresence>

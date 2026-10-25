@@ -547,8 +547,6 @@
 .students-badge { font-size: 10px; letter-spacing: 1.15px; }
 .students-header h1 { letter-spacing: -.7px; }
 .students-add-btn { display: inline-flex; align-items: center; justify-content: center; gap: 7px; border-radius: 10px; box-shadow: 0 6px 14px rgba(37, 99, 235, .16); }
-.students-demo-note { display: flex; align-items: center; gap: 8px; margin: 0 0 13px; color: #77859a; font-size: 10px; }
-.students-demo-note span { width: 7px; height: 7px; border-radius: 50%; background: #6c8fee; box-shadow: 0 0 0 3px #e8efff; }
 .students-summary-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 13px; margin-bottom: 16px; }
 .students-summary-grid > div { display: grid; gap: 4px; padding: 14px 16px; border: 1px solid #e6ebf2; border-radius: 13px; background: #fff; box-shadow: 0 3px 12px rgba(15, 23, 42, .025); }
 .students-summary-grid span { color: #7a879a; font-size: 10px; font-weight: 600; }

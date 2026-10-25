@@ -574,7 +574,7 @@ function Login() {
                 <button
                   type="button"
                   className="cc-forgot"
-                  onClick={() => setError("Password recovery isn't connected in this demo. Contact your campus administrator for access.")}
+                  onClick={() => setError("Password recovery is not configured. Contact your campus administrator for access.")}
                 >
                   Forgot Password?
                 </button>
@@ -988,7 +988,6 @@ function Dashboard() {
               STATISTICS
               ================================================= */}
 
-          <div className="dashboard-demo-caption"><span className="dashboard-demo-dot" />Sample campus snapshot · Current academic session</div>
           <div className="erp-stats-grid">
 
             {/* Students */}
@@ -1179,8 +1178,8 @@ function Dashboard() {
           </div>
 
           <section className="dashboard-analytics-grid">
-            <article className="erp-panel enrollment-panel"><div className="erp-panel-header"><div><h2>Student enrollment</h2><p>Enrollment trend · sample data</p></div><span className="analytics-period">Last 6 months <ChevronDown size={13} /></span></div><div className="enrollment-chart" role="img" aria-label="Student enrollment trend rises steadily from May through October"><div className="chart-y-labels"><span>2,600</span><span>2,400</span><span>2,200</span><span>2,000</span></div><div className="chart-plot"><div className="chart-gridlines"><i /><i /><i /><i /></div><svg viewBox="0 0 600 190" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="enrollment-fill" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stopColor="#4f7df3" stopOpacity=".22"/><stop offset="100%" stopColor="#4f7df3" stopOpacity="0"/></linearGradient></defs><path className="chart-area" d="M0 145 C50 135 68 119 120 125 S200 105 240 110 S310 80 360 92 S430 57 480 70 S550 35 600 42 V190 H0 Z"/><path className="chart-line" d="M0 145 C50 135 68 119 120 125 S200 105 240 110 S310 80 360 92 S430 57 480 70 S550 35 600 42"/><circle cx="600" cy="42" r="5" /></svg><div className="chart-x-labels"><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span></div></div></div><div className="chart-legend"><span><i />Student enrollment</span><strong>2,450 <small>students</small></strong></div></article>
-            <article className="erp-panel distribution-panel"><div className="erp-panel-header"><div><h2>Course distribution</h2><p>Enrollment by school · sample data</p></div><button className="erp-text-btn" onClick={() => navigate("/courses")}>View courses</button></div><div className="distribution-list"><div><span><i className="distribution-blue"/>Engineering</span><div><b style={{ width: "79%" }}/></div><strong>32%</strong></div><div><span><i className="distribution-purple"/>Computing</span><div><b style={{ width: "66%" }}/></div><strong>27%</strong></div><div><span><i className="distribution-cyan"/>Business</span><div><b style={{ width: "48%" }}/></div><strong>21%</strong></div><div><span><i className="distribution-orange"/>Sciences</span><div><b style={{ width: "39%" }}/></div><strong>20%</strong></div></div></article>
+            <article className="erp-panel enrollment-panel"><div className="erp-panel-header"><div><h2>Student enrollment</h2><p>Enrollment trend</p></div><span className="analytics-period">Last 6 months <ChevronDown size={13} /></span></div><div className="enrollment-chart" role="img" aria-label="Student enrollment trend rises steadily from May through October"><div className="chart-y-labels"><span>2,600</span><span>2,400</span><span>2,200</span><span>2,000</span></div><div className="chart-plot"><div className="chart-gridlines"><i /><i /><i /><i /></div><svg viewBox="0 0 600 190" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="enrollment-fill" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stopColor="#4f7df3" stopOpacity=".22"/><stop offset="100%" stopColor="#4f7df3" stopOpacity="0"/></linearGradient></defs><path className="chart-area" d="M0 145 C50 135 68 119 120 125 S200 105 240 110 S310 80 360 92 S430 57 480 70 S550 35 600 42 V190 H0 Z"/><path className="chart-line" d="M0 145 C50 135 68 119 120 125 S200 105 240 110 S310 80 360 92 S430 57 480 70 S550 35 600 42"/><circle cx="600" cy="42" r="5" /></svg><div className="chart-x-labels"><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span></div></div></div><div className="chart-legend"><span><i />Student enrollment</span><strong>2,450 <small>students</small></strong></div></article>
+            <article className="erp-panel distribution-panel"><div className="erp-panel-header"><div><h2>Course distribution</h2><p>Enrollment by school</p></div><button className="erp-text-btn" onClick={() => navigate("/courses")}>View courses</button></div><div className="distribution-list"><div><span><i className="distribution-blue"/>Engineering</span><div><b style={{ width: "79%" }}/></div><strong>32%</strong></div><div><span><i className="distribution-purple"/>Computing</span><div><b style={{ width: "66%" }}/></div><strong>27%</strong></div><div><span><i className="distribution-cyan"/>Business</span><div><b style={{ width: "48%" }}/></div><strong>21%</strong></div><div><span><i className="distribution-orange"/>Sciences</span><div><b style={{ width: "39%" }}/></div><strong>20%</strong></div></div></article>
           </section>
 
 
