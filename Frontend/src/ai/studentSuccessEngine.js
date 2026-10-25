@@ -1,44 +1,37 @@
-export const studentSuccessKey = "campuscore360:students";
-export const studentSuccessSettingsKey = "campuscore360:student-success-settings";
+export const studentSuccessKey = "campuscore360:students:v2";
+export const studentSuccessSettingsKey = "campuscore360:student-success-settings:v2";
+
+const legacyStudentKey = "campuscore360:students";
+const legacySettingsKey = "campuscore360:student-success-settings";
 
 export const sampleStudents = [
-  { id: "STU001", name: "Mayank Shakya", email: "mayank@campuscore360.com", course: "MCA", year: "2nd Year", status: "Active", attendance: "96%", performance: 82, previousPerformance: 78 },
-  { id: "STU002", name: "Ankit Kumar", email: "ankit@campuscore360.com", course: "BCA", year: "2nd Year", status: "Active", attendance: "91%", performance: 76, previousPerformance: 80 },
-  { id: "STU003", name: "Priya Singh", email: "priya@campuscore360.com", course: "MCA", year: "2nd Year", status: "Active", attendance: "94%", performance: 58, previousPerformance: 66 },
-  { id: "STU004", name: "Babulal Yadav", email: "Junaid@campuscore360.com", course: "B.Tech", year: "3rd Year", status: "Inactive", attendance: "68%", performance: 49, previousPerformance: 54 },
+  { id: "STU001", name: "Mayank Shakya", email: "mayank.shakya@example.com", course: "MCA", year: "2nd Year", status: "Active", attendance: "96%", performance: 82, previousPerformance: 80 },
+  { id: "STU002", name: "Ansh Chaurasia", email: "ansh.chaurasia@example.com", course: "B.Tech AI", year: "2nd Year", status: "Active", attendance: "94%", performance: 57, previousPerformance: 66 },
+  { id: "STU003", name: "Ankit Singh", email: "ankit.singh@example.com", course: "B.Tech CS AI", year: "2nd Year", status: "Active", attendance: "93%", performance: 68, previousPerformance: 75 },
+  { id: "STU004", name: "Alok Singh", email: "alok.singh@example.com", course: "CS IT", year: "2nd Year", status: "Active", attendance: "95%", performance: 74, previousPerformance: 72 },
+  { id: "STU005", name: "Aman Mishra", email: "aman.mishra@example.com", course: "CS IT", year: "2nd Year", status: "Active", attendance: "96%", performance: 59, previousPerformance: 64 },
+  { id: "STU006", name: "Tanishq Singh", email: "tanishq.singh@example.com", course: "CS IT", year: "2nd Year", status: "Active", attendance: "94%", performance: 80, previousPerformance: 80 },
 ];
-
-const legacyScores = {
-  STU001: { performance: 82, previousPerformance: 78 },
-  STU002: { performance: 76, previousPerformance: 80 },
-  STU003: { performance: 58, previousPerformance: 66 },
-  STU004: { performance: 49, previousPerformance: 54 },
-};
 
 export function readStudentRecords() {
   try {
-    const saved = window.sessionStorage.getItem(studentSuccessKey);
-    const parsed = saved ? JSON.parse(saved) : null;
-    const records = Array.isArray(parsed) ? parsed : sampleStudents;
-    return records.map((student) => {
-      const fallback = legacyScores[student.id] || { performance: 70, previousPerformance: 70 };
-      const legacySampleAttendance = student.id === "STU004" && student.name === "Babulal Yadav" && student.performance == null ? 68 : student.attendance;
-      return {
-        ...student,
-        attendance: Number.parseFloat(legacySampleAttendance) || 0,
-        performance: Number(student.performance ?? fallback.performance),
-        previousPerformance: Number(student.previousPerformance ?? fallback.previousPerformance),
-      };
-    });
+    const saved = window.localStorage.getItem(studentSuccessKey);
+    if (saved !== null) return normalizeStudents(JSON.parse(saved));
+
+    const legacy = window.sessionStorage.getItem(legacyStudentKey);
+    const legacyRecords = legacy ? JSON.parse(legacy) : null;
+    const initialRecords = Array.isArray(legacyRecords) ? migrateLegacyStudents(legacyRecords) : sampleStudents;
+    window.localStorage.setItem(studentSuccessKey, JSON.stringify(initialRecords));
+    return normalizeStudents(initialRecords);
   } catch {
-    return sampleStudents.map((student) => ({ ...student, attendance: Number.parseFloat(student.attendance) || 0 }));
+    return normalizeStudents(sampleStudents);
   }
 }
 
 export function readStudentSuccessSettings() {
   const defaults = { attendanceMinimum: 75, performanceMinimum: 60 };
   try {
-    const saved = JSON.parse(window.sessionStorage.getItem(studentSuccessSettingsKey) || "{}");
+    const saved = JSON.parse(window.localStorage.getItem(studentSuccessSettingsKey) || window.sessionStorage.getItem(legacySettingsKey) || "{}");
     return {
       attendanceMinimum: clampThreshold(saved.attendanceMinimum, defaults.attendanceMinimum),
       performanceMinimum: clampThreshold(saved.performanceMinimum, defaults.performanceMinimum),
@@ -46,6 +39,34 @@ export function readStudentSuccessSettings() {
   } catch {
     return defaults;
   }
+}
+
+function normalizeStudents(records) {
+  return (Array.isArray(records) ? records : sampleStudents).map((student) => ({
+    ...student,
+    attendance: Number.parseFloat(student.attendance) || 0,
+    performance: Number(student.performance ?? 70),
+    previousPerformance: Number(student.previousPerformance ?? student.performance ?? 70),
+  }));
+}
+
+function migrateLegacyStudents(records) {
+  // Replace the four original sample rows with the requested roster, while retaining
+  // any students that were added by the user before persistent storage was introduced.
+  const customRecords = records.filter((student) => !["STU001", "STU002", "STU003", "STU004"].includes(student.id));
+  const usedIds = new Set(customRecords.map((student) => student.id));
+  const migratedSamples = sampleStudents.map((student) => {
+    if (!usedIds.has(student.id)) {
+      usedIds.add(student.id);
+      return student;
+    }
+    let nextId = 1;
+    while (usedIds.has(`STU${String(nextId).padStart(3, "0")}`)) nextId += 1;
+    const migrated = { ...student, id: `STU${String(nextId).padStart(3, "0")}` };
+    usedIds.add(migrated.id);
+    return migrated;
+  });
+  return [...migratedSamples, ...customRecords];
 }
 
 function clampThreshold(value, fallback) {

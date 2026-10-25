@@ -1,44 +1,61 @@
-# CampusCore360 Student Success AI Demo Guide
+# CampusCore360 Student Success AI: Presentation Guide
 
-## What to show
+## Open the demo
 
-Open **Student Success AI** from the workspace navigation, or go to `/student-success`.
+Run the frontend with `npm run dev`, then open the local address printed in the terminal. The home page opens Student Success AI. You can also choose **Student Success AI** from the workspace sidebar.
 
-1. Point out the college criteria. The demo defaults to **75% minimum attendance** and **60% minimum performance**. Open **Criteria** to change them; the results recalculate immediately.
-2. Open **How it works**. It explains the three stages: read the student signals, score the concern, and suggest a next step.
-3. Review the student cards. They compare attendance, current average, and previous average. Each card shows the concern, relative support score, contributing factors, and a personalized recommendation.
-4. Show the dashboard bell. It lists students who meet the current support criteria and links to the detailed analysis.
-5. Select **Prepare message** on a student. Review the personalized email preview and choose **Open email draft**. This hands the reviewed draft to the user's email application.
-6. Choose **Download report** to export the current student analysis as CSV for review in a spreadsheet.
-7. In **Students**, edit a record's attendance average, current average, or previous average. Return to Student Success AI to show how the alert and recommendation respond to the updated figures.
+## What the demo shows
 
-## How the demo analysis works
+- Six sample students: Mayank Shakya (MCA), Ansh Chaurasia (B.Tech AI), Ankit Singh (B.Tech CS AI), Alok Singh (CS IT), Aman Mishra (CS IT), and Tanishq Singh (CS IT).
+- The sample attendance values are all above the default college minimum of 75%. Some assessment averages are intentionally low or falling so the support alerts can be demonstrated.
+- Email addresses use the reserved `example.com` domain as dummy data.
+- The **Students** page lets staff add, edit, and remove demo records, including attendance and marks.
+- Student records and criteria are saved automatically in this browser's local storage. Refreshing the page keeps them on the same browser and local website address. This is local demo storage, not a shared college database.
+- The AI page compares each student's current information with college criteria, explains any concern, suggests a next step, prepares a personalized message for staff to review, and downloads a CSV report.
 
-The prototype uses a small, deterministic, explainable rules engine in `Frontend/src/ai/studentSuccessEngine.js`:
+## Easy workflow explanation
 
-- Flag attendance when it is below the configured attendance minimum.
-- Flag performance when the current average is below the configured performance minimum.
-- Flag a falling trend when the current average is at least 5 points below the previous average.
-- Calculate a **relative support score**, not a probability: attendance gap × 5 (45% weight), performance gap × 5 (35% weight), and downward trend × 10 (20% weight). Each factor is capped at 100.
-- Choose a supportive next step based on the combination of concerns. Use the same student metrics and recommendation to create a message preview.
+1. **Enter student information.** The demo uses branch, attendance average, current marks, and previous marks from the Students page.
+2. **Check the college rules.** The default minimums are 75% attendance and 60% performance; staff can change these in **Criteria**.
+3. **Find support signals.** The engine flags attendance below the minimum, performance below the minimum, or a fall of at least five points from the previous average.
+4. **Explain the result.** It shows which figures caused the alert and calculates a relative support score to help staff decide who to review first. The score is not a probability or a diagnosis.
+5. **Suggest a helpful action.** The page recommends a practical study or attendance step and prepares a message using the student's name and figures.
+6. **Keep a person in control.** A faculty member reviews the suggestion and message. The demo does not send email automatically.
+7. **Review the cohort.** Staff can download the analysis and recommendations as a CSV report.
 
-The rules run in the browser against the current student records in `sessionStorage`. The attendance value is the student's aggregate attendance average entered in Student Management; the daily class register is still a separate demo list. The included records are sample data. The score helps prioritize review; it is not a diagnosis, a prediction of a student's future, or a substitute for a faculty member's judgment.
+## What is implemented today
 
-## Where the work lives
+The current version is a **front-end prototype with transparent, rules-based analysis**. It does not send student information to an external AI model. Its decision steps are implemented in `Frontend/src/ai/studentSuccessEngine.js`:
 
-- `Frontend/src/Components/student-success/StudentSuccess.jsx` — student analysis screen, criteria controls, notifications, message preview, and report action.
-- `Frontend/src/Components/student-success/studentSuccessEngine.js` — thresholds, support rules, recommendations, message text, and CSV generation.
-- `Frontend/src/Components/student-success/student-success.css` — responsive screen styling.
-- `Frontend/src/Components/students/students.jsx` — attendance and current/previous performance inputs that feed the analysis.
-- `Frontend/src/Components/modules/ModulePage.jsx` — shared workspace navigation and student support notification bell.
-- `Frontend/src/App.jsx` — dashboard navigation and `/student-success` route.
+- Attendance gap contributes 45% of the relative score.
+- Performance gap contributes 35%.
+- A downward performance trend contributes 20%.
+- Each factor is capped before the combined score is shown.
+- A rules-based recommendation and message are selected from the student's actual demo values.
 
-## What is and is not connected yet
+The attendance input is an aggregate value entered in the Students page. It is not yet connected to the daily attendance register. Demo information lives in browser local storage, so another computer or browser will not see the same edits.
 
-This is a **frontend demo of an explainable AI-style decision-support workflow**. It currently does not call a generative AI model, connect the daily class register to attendance averages, save to a server database, or send mail automatically. The message is prepared for a person to review; the email application handles any sending.
+## A short answer for faculty
 
-When the backend is ready, connect authenticated attendance and assessment APIs, persist student records and college criteria on the server, and move any model or email credentials to server-side environment variables. Keep the current threshold checks as clear guardrails, ask a model only for optional supportive wording, and require staff review before messages are sent. Never put a private model or email API key in the React frontend.
+> “Student Success AI is an early-warning and support prototype inside CampusCore360. It checks student attendance and assessment averages against college criteria, and compares current marks with previous marks. If it sees a low value or a decline, it explains why, suggests a supportive next step, and drafts a personalized message for a faculty member to review. Staff can also export the results. The current demo uses sample data and transparent rules in the browser; it is not making final decisions or sending messages automatically.”
 
-## Short presentation script
+## If faculty asks, “Is this using ChatGPT or a live AI model?”
 
-> “This is the Student Success AI prototype for CampusCore360. It reviews each student's attendance, current marks, and previous marks against configurable college criteria. When it sees a low attendance value, low performance, or a significant decline, it explains the signals, assigns a relative support score, and recommends a practical next step. Staff can preview a personalized message and export the cohort analysis. For this demo, the analysis is explainable browser-side logic using sample session data; the backend, live data, external AI model, and automatic email delivery will be connected in a later phase.”
+> “Not in this prototype. The current analysis uses explainable rules so we can demonstrate the complete workflow without a backend. The structure is ready to connect to secure campus data and an AI service in a later phase. Any model-generated advice should remain a suggestion and require staff review.”
+
+## Future implementation plan
+
+1. **Secure backend and database:** add staff sign-in, roles, server APIs, and a database so authorized staff share accurate records across devices.
+2. **Live academic data:** connect the attendance register and assessment system; validate missing, old, or inconsistent records.
+3. **Reliable early-warning model:** use approved historical data to evaluate whether risk indicators help identify students who may need support. Measure accuracy and check for unfair outcomes across groups before relying on it.
+4. **Optional language model:** call an approved AI service only from the backend to help phrase supportive messages. Keep the college's numeric rules as guardrails and avoid exposing secret keys or unnecessary student data.
+5. **Reviewed notifications:** let faculty approve messages before sending them through a mail provider; record who approved and sent each message.
+6. **Privacy and monitoring:** limit access by role, protect sensitive data, keep an audit trail, and review alert quality with faculty and students.
+
+## Where to find the code
+
+- `Frontend/src/ai/studentSuccessEngine.js` — demo roster, criteria, support scoring, message wording, and CSV export.
+- `Frontend/src/Components/student-success/StudentSuccess.jsx` — analysis cards, criteria controls, message review, and report action.
+- `Frontend/src/Components/student-success/student-success.css` — Student Success AI page styles.
+- `Frontend/src/Components/students/students.jsx` — student create/edit/delete form and academic data inputs.
+- `Frontend/src/App.jsx` — app home route and workspace navigation.

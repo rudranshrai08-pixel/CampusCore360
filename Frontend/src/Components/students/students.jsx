@@ -8,7 +8,7 @@ function Students() {
   const location = useLocation();
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
-  const [courseFilter, setCourseFilter] = useState("All Courses");
+  const [courseFilter, setCourseFilter] = useState("All Branches");
   const [yearFilter, setYearFilter] = useState("All Years");
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [showForm, setShowForm] = useState(() => Boolean(location.state?.openAddStudent));
@@ -37,7 +37,7 @@ const [newStudent, setNewStudent] = useState({
       .includes(search.toLowerCase());
 
   const matchesCourse =
-    courseFilter === "All Courses" ||
+    courseFilter === "All Branches" ||
     student.course === courseFilter;
 
   const matchesYear =
@@ -49,6 +49,13 @@ const [newStudent, setNewStudent] = useState({
 const pageSize = 6;
 const visibleStudents = filteredStudents.slice((page - 1) * pageSize, page * pageSize);
 const pageCount = Math.max(1, Math.ceil(filteredStudents.length / pageSize));
+
+const createStudentId = (records) => {
+  const existingIds = new Set(records.map((student) => student.id));
+  let number = 1;
+  while (existingIds.has(`STU${String(number).padStart(3, "0")}`)) number += 1;
+  return `STU${String(number).padStart(3, "0")}`;
+};
 
 const openAddForm = () => {
   setEditingId(null);
@@ -65,7 +72,7 @@ useEffect(() => {
 
 useEffect(() => {
   try {
-    window.sessionStorage.setItem(studentSuccessKey, JSON.stringify(students));
+    window.localStorage.setItem(studentSuccessKey, JSON.stringify(students));
   } catch {
     // Keep student management available if browser storage is disabled.
   }
@@ -90,10 +97,16 @@ const saveStudent = () => {
     return;
   }
   if (editingId) {
-    setStudents((current) => current.map((student) => student.id === editingId ? { ...student, ...newStudent } : student));
+    setStudents((current) => current.map((student) => student.id === editingId ? {
+      ...student,
+      ...newStudent,
+      attendance: `${Math.min(100, Math.max(0, Number(newStudent.attendance) || 0))}%`,
+      performance: Math.min(100, Math.max(0, Number(newStudent.performance) || 0)),
+      previousPerformance: Math.min(100, Math.max(0, Number(newStudent.previousPerformance) || 0)),
+    } : student));
     showFeedback("Student details updated");
   } else {
-    const student = { id: `STU${String(students.length + 1).padStart(3, "0")}`, ...newStudent, performance: Math.min(100, Math.max(0, Number(newStudent.performance) || 0)), previousPerformance: Math.min(100, Math.max(0, Number(newStudent.previousPerformance) || 0)), attendance: `${Math.min(100, Math.max(0, Number(newStudent.attendance) || 0))}%` };
+    const student = { id: createStudentId(students), ...newStudent, performance: Math.min(100, Math.max(0, Number(newStudent.performance) || 0)), previousPerformance: Math.min(100, Math.max(0, Number(newStudent.previousPerformance) || 0)), attendance: `${Math.min(100, Math.max(0, Number(newStudent.attendance) || 0))}%` };
     setStudents((current) => [student, ...current]);
     setPage(1);
     showFeedback("Student added to the directory");
@@ -120,7 +133,7 @@ const saveStudent = () => {
           <Plus size={16} /> Add Student
         </button>
       </div>
-      <div className="students-demo-note"><span />Sample student records · Current academic session</div>
+      <div className="students-demo-note"><span />Demo student records · Changes save automatically in this browser</div>
       <div className="students-summary-grid"><div><span>Enrolled students</span><strong>{students.length}</strong><small>In this demo directory</small></div><div><span>Active enrollment</span><strong>{students.filter((student) => student.status === "Active").length}</strong><small>Across all programs</small></div><div><span>Average attendance</span><strong>{students.length ? `${Math.round(students.reduce((sum, student) => sum + Number.parseInt(student.attendance || "0", 10), 0) / students.length)}%` : "—"}</strong><small>Sample attendance data</small></div><div><span>Average performance</span><strong>{students.length ? `${Math.round(students.reduce((sum, student) => sum + Number(student.performance ?? 70), 0) / students.length)}%` : "—"}</strong><small>Used by Student Success AI</small></div></div>
       {showForm && (
   <div className="student-form-card">
@@ -156,6 +169,7 @@ const saveStudent = () => {
       />
 
       <select
+        aria-label="Student branch"
         value={newStudent.course}
         onChange={(e) =>
           setNewStudent({
@@ -167,6 +181,9 @@ const saveStudent = () => {
         <option>MCA</option>
         <option>BCA</option>
         <option>B.Tech</option>
+        <option>B.Tech AI</option>
+        <option>B.Tech CS AI</option>
+        <option>CS IT</option>
       </select>
 
       <select
@@ -234,10 +251,13 @@ const saveStudent = () => {
   value={courseFilter}
   onChange={(e) => { setCourseFilter(e.target.value); setPage(1); }}
 >
-          <option>All Courses</option>
+          <option>All Branches</option>
           <option>MCA</option>
           <option>BCA</option>
           <option>B.Tech</option>
+          <option>B.Tech AI</option>
+          <option>B.Tech CS AI</option>
+          <option>CS IT</option>
         </select>
 
         <select
@@ -274,7 +294,7 @@ const saveStudent = () => {
                 <th>ID</th>
                 <th>Student</th>
                 <th>Email</th>
-                <th>Course</th>
+                <th>Branch</th>
                 <th>Year</th>
                 <th>Attendance</th>
                 <th>Performance</th>
@@ -285,7 +305,7 @@ const saveStudent = () => {
 
             <tbody>
 
-              {visibleStudents.length === 0 && <tr><td colSpan="9"><div className="students-empty-state"><span><Search size={19} /></span><strong>No students found</strong><p>Try another search term or clear your filters.</p><button onClick={() => { setSearch(""); setCourseFilter("All Courses"); setYearFilter("All Years"); }}>Clear filters</button></div></td></tr>}
+              {visibleStudents.length === 0 && <tr><td colSpan="9"><div className="students-empty-state"><span><Search size={19} /></span><strong>No students found</strong><p>Try another search term or clear your filters.</p><button onClick={() => { setSearch(""); setCourseFilter("All Branches"); setYearFilter("All Years"); }}>Clear filters</button></div></td></tr>}
 
               {visibleStudents.map((student) => (
 
@@ -399,7 +419,7 @@ const saveStudent = () => {
         </div>
 
         <div>
-          <span>Course</span>
+          <span>Branch</span>
           <strong>{selectedStudent.course}</strong>
         </div>
 

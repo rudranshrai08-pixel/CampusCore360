@@ -25,7 +25,7 @@ function StudentSuccess() {
 
   useEffect(() => {
     try {
-      window.sessionStorage.setItem(studentSuccessSettingsKey, JSON.stringify(thresholds));
+      window.localStorage.setItem(studentSuccessSettingsKey, JSON.stringify(thresholds));
     } catch {
       // The insight screen remains usable when browser storage is disabled.
     }
@@ -120,7 +120,7 @@ function StudentSuccess() {
         <section className="success-student-section">
           <div className="success-list-heading">
             <div><span className="success-section-kicker">INDIVIDUAL FOLLOW-UP</span><h2>Student analysis</h2><p>Each recommendation is based on the student’s recorded progress.</p></div>
-            <label className="success-search"><Search size={16} /><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search student or course" aria-label="Search students" /></label>
+            <label className="success-search"><Search size={16} /><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search student or branch" aria-label="Search students or branches" /></label>
           </div>
           <div className="success-filter-row" role="group" aria-label="Filter student support list">
             {filters.map((item) => <button key={item} className={filter === item ? "selected" : ""} onClick={() => setFilter(item)}>{item}{item === "Needs support" && <span>{supportStudents.length}</span>}</button>)}
@@ -143,7 +143,7 @@ function StudentSuccess() {
             {visibleStudents.length === 0 && <div className="success-empty"><span><Search size={19} /></span><strong>No students match this view</strong><p>Try another filter or search term.</p></div>}
           </div>
         </section>
-        <p className="success-data-note">Student details are read from this browser’s current session. Sample records are shown until a live campus data source is connected.</p>
+        <p className="success-data-note">Demo student records and criteria save automatically in this browser, including after refresh. A live campus database can replace this local storage in a future phase.</p>
       </div>
 
       <AnimatePresence>{selectedStudent && <MessageDialog student={selectedStudent} thresholds={thresholds} onClose={() => setSelectedStudent(null)} />}</AnimatePresence>
