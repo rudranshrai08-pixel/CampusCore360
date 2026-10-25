@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { MotionConfig, motion } from "framer-motion";
 
@@ -23,6 +23,7 @@ import {
   Bell,
   Search,
   Plus,
+  Sparkles,
 } from "lucide-react";
 
 import {
@@ -38,6 +39,8 @@ import "./App.css";
 
 import Students from "./Components/students/students.jsx";
 import ModulePage, { Workspace } from "./Components/modules/ModulePage.jsx";
+import StudentSuccess from "./Components/student-success/StudentSuccess.jsx";
+import { analyzeStudent, readStudentRecords, readStudentSuccessSettings } from "./ai/studentSuccessEngine.js";
 
 /* =========================================================
    LOGIN
@@ -657,6 +660,10 @@ function Login() {
 function Dashboard() {
   const navigate = useNavigate();
   const location = useLocation();
+  const studentAlerts = useMemo(() => {
+    const criteria = readStudentSuccessSettings();
+    return readStudentRecords().map((student) => analyzeStudent(student, criteria)).filter((student) => student.needsSupport);
+  }, []);
 
   const [sidebarOpen, setSidebarOpen] =
     useState(false);
@@ -685,6 +692,7 @@ function Dashboard() {
     { name: "Courses", icon: BookOpen },
     { name: "Examinations", icon: CalendarDays },
     { name: "Reports", icon: BarChart3 },
+    { name: "Student Success AI", icon: Sparkles },
   ];
 
   const handleMenuClick = (name) => {
@@ -699,6 +707,7 @@ function Dashboard() {
       Courses: "/courses",
       Examinations: "/examinations",
       Reports: "/reports",
+      "Student Success AI": "/student-success",
     };
 
     navigate(routes[name]);
@@ -902,11 +911,11 @@ function Dashboard() {
 
               <Bell size={18} />
 
-              <span className="notification-dot" />
+              {studentAlerts.length > 0 && <span className="notification-dot" />}
 
             </button>
 
-            {topbarPanel === "notifications" && <div className="dashboard-popover"><strong>You're all caught up</strong><span>New campus updates will appear here.</span></div>}
+            {topbarPanel === "notifications" && <div className="dashboard-popover dashboard-notification-popover"><strong>{studentAlerts.length ? `${studentAlerts.length} student check-in${studentAlerts.length === 1 ? "" : "s"} suggested` : "You're all caught up"}</strong><span>{studentAlerts.length ? "Current attendance and performance signals." : "No students are below the current criteria."}</span>{studentAlerts.slice(0, 3).map((student) => <button key={student.id} className="dashboard-notification-entry" onClick={() => navigate("/student-success")}><i className={student.severity === "high" ? "priority" : ""} /><span><strong>{student.name}</strong><small>{student.concerns.join(" + ")}</small></span><ArrowRight size={14} /></button>)}<button className="dashboard-notification-link" onClick={() => navigate("/student-success")}>Open Student Success AI<ArrowRight size={14} /></button></div>}
 
             <button className="erp-profile dashboard-profile-button" aria-expanded={topbarPanel === "profile"} onClick={() => setTopbarPanel((current) => current === "profile" ? "" : "profile")}>
 
@@ -1729,6 +1738,11 @@ function App() {
               <Students />
             </Workspace>
           }
+        />
+
+        <Route
+          path="/student-success"
+          element={<StudentSuccess />}
         />
 
         {/* Faculty */}

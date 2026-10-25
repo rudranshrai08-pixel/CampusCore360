@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
+import { analyzeStudent, readStudentRecords, readStudentSuccessSettings } from "../../ai/studentSuccessEngine.js";
 import "./modules.css";
 
 const navigation = [
@@ -18,6 +19,7 @@ const navigation = [
   ["Courses", "/courses", Activity],
   ["Examinations", "/examinations", CalendarDays],
   ["Reports", "/reports", FileBarChart2],
+  ["Student Success AI", "/student-success", Sparkles],
 ];
 
 const demoModules = {
@@ -166,6 +168,10 @@ function Workspace({ children }) {
   const [profileOpen, setProfileOpen] = useState(false);
   const [noticeOpen, setNoticeOpen] = useState(false);
   const [globalSearch, setGlobalSearch] = useState("");
+  const studentAlerts = useMemo(() => {
+    const criteria = readStudentSuccessSettings();
+    return readStudentRecords().map((student) => analyzeStudent(student, criteria)).filter((student) => student.needsSupport);
+  }, []);
 
   const navigateTo = (path) => {
     setDrawerOpen(false);
@@ -200,8 +206,8 @@ function Workspace({ children }) {
           <div className="workspace-search-wrap"><label className="erp-search workspace-search"><Search size={17} /><input aria-label="Search workspace pages" value={globalSearch} onChange={(event) => setGlobalSearch(event.target.value)} onKeyDown={(event) => { if (event.key === "Escape") setGlobalSearch(""); if (event.key === "Enter" && globalSearch.trim()) { const first = navigation.find(([label]) => label.toLowerCase().includes(globalSearch.trim().toLowerCase())); if (first) navigateTo(first[1]); } }} placeholder="Search workspace pages…" /></label>{globalSearch.trim() && <div className="workspace-search-results">{navigation.filter(([label]) => label.toLowerCase().includes(globalSearch.trim().toLowerCase())).map(([label, path, Icon]) => <button key={path} onClick={() => { navigateTo(path); setGlobalSearch(""); }}><Icon size={15} />{label}<ChevronRight size={14} /></button>)}{!navigation.some(([label]) => label.toLowerCase().includes(globalSearch.trim().toLowerCase())) && <span>No matching pages</span>}</div>}</div>
           <div className="erp-topbar-right">
             <div className="workspace-popover-wrap">
-              <button className="erp-icon-btn" title="Notifications" aria-label="Notifications" aria-expanded={noticeOpen} onClick={() => { setNoticeOpen((value) => !value); setProfileOpen(false); }}><Bell size={18} /><span className="notification-dot" /></button>
-              {noticeOpen && <div className="workspace-popover"><strong>You're all caught up</strong><span>New campus updates will appear here.</span></div>}
+              <button className="erp-icon-btn" title="Notifications" aria-label="Notifications" aria-expanded={noticeOpen} onClick={() => { setNoticeOpen((value) => !value); setProfileOpen(false); }}><Bell size={18} />{studentAlerts.length > 0 && <span className="notification-dot" />}</button>
+              {noticeOpen && <div className="workspace-popover workspace-alert-popover"><strong>{studentAlerts.length ? `${studentAlerts.length} student check-in${studentAlerts.length === 1 ? "" : "s"} suggested` : "You're all caught up"}</strong><span>{studentAlerts.length ? "Based on current attendance and performance criteria." : "No students are below the current support criteria."}</span>{studentAlerts.slice(0, 3).map((student) => <button key={student.id} onClick={() => navigateTo("/student-success")}><span className={`workspace-alert-dot alert-${student.severity}`} /><span><strong>{student.name}</strong><small>{student.concerns.join(" + ")}</small></span><ChevronRight size={14} /></button>)}<button className="workspace-alert-link" onClick={() => navigateTo("/student-success")}>Open Student Success AI<ChevronRight size={14} /></button></div>}
             </div>
             <div className="workspace-popover-wrap">
               <button className="erp-profile workspace-profile" aria-expanded={profileOpen} onClick={() => { setProfileOpen((value) => !value); setNoticeOpen(false); }}><div className="erp-avatar">A</div><div className="erp-profile-info"><strong>Admin</strong><span>Administrator</span></div><ChevronDown size={15} className="profile-arrow" /></button>

@@ -1,14 +1,8 @@
 import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Eye, Pencil, Plus, Search, Trash2, X } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { readStudentRecords, studentSuccessKey } from "../../ai/studentSuccessEngine.js";
 import "./students.css";
-
-const initialStudents = [
-  { id: "STU001", name: "Mayank Shakya", email: "mayank@campuscore360.com", course: "MCA", year: "2nd Year", status: "Active", attendance: "96%" },
-  { id: "STU002", name: "Ankit Kumar", email: "ankit@campuscore360.com", course: "BCA", year: "2nd Year", status: "Active", attendance: "91%" },
-  { id: "STU003", name: "Priya Singh", email: "priya@campuscore360.com", course: "MCA", year: "2nd Year", status: "Active", attendance: "94%" },
-  { id: "STU004", name: "Babulal Yadav", email: "Junaid@campuscore360.com", course: "B.Tech", year: "3rd Year", status: "Inactive", attendance: "78%" },
-];
 
 function Students() {
   const location = useLocation();
@@ -30,16 +24,11 @@ const [newStudent, setNewStudent] = useState({
   course: "MCA",
   year: "1st Year",
   status: "Active",
+  attendance: 100,
+  performance: 70,
+  previousPerformance: 70,
 });
-  const [students, setStudents] = useState(() => {
-    try {
-      const saved = window.sessionStorage.getItem("campuscore360:students");
-      const parsed = saved ? JSON.parse(saved) : null;
-      return Array.isArray(parsed) ? parsed : initialStudents;
-    } catch {
-      return initialStudents;
-    }
-  });
+  const [students, setStudents] = useState(readStudentRecords);
 
  const filteredStudents = students.filter((student) => {
   const matchesSearch =
@@ -63,7 +52,7 @@ const pageCount = Math.max(1, Math.ceil(filteredStudents.length / pageSize));
 
 const openAddForm = () => {
   setEditingId(null);
-  setNewStudent({ name: "", email: "", course: "MCA", year: "1st Year", status: "Active" });
+  setNewStudent({ name: "", email: "", course: "MCA", year: "1st Year", status: "Active", attendance: 100, performance: 70, previousPerformance: 70 });
   setFormError("");
   setShowForm(true);
 };
@@ -76,7 +65,7 @@ useEffect(() => {
 
 useEffect(() => {
   try {
-    window.sessionStorage.setItem("campuscore360:students", JSON.stringify(students));
+    window.sessionStorage.setItem(studentSuccessKey, JSON.stringify(students));
   } catch {
     // Keep student management available if browser storage is disabled.
   }
@@ -84,7 +73,7 @@ useEffect(() => {
 
 const openEditForm = (student) => {
   setEditingId(student.id);
-  setNewStudent({ name: student.name, email: student.email, course: student.course, year: student.year, status: student.status });
+  setNewStudent({ name: student.name, email: student.email, course: student.course, year: student.year, status: student.status, attendance: Number.parseFloat(student.attendance) || 0, performance: student.performance ?? 70, previousPerformance: student.previousPerformance ?? student.performance ?? 70 });
   setFormError("");
   setShowForm(true);
 };
@@ -104,7 +93,7 @@ const saveStudent = () => {
     setStudents((current) => current.map((student) => student.id === editingId ? { ...student, ...newStudent } : student));
     showFeedback("Student details updated");
   } else {
-    const student = { id: `STU${String(students.length + 1).padStart(3, "0")}`, ...newStudent, attendance: "100%" };
+    const student = { id: `STU${String(students.length + 1).padStart(3, "0")}`, ...newStudent, performance: Math.min(100, Math.max(0, Number(newStudent.performance) || 0)), previousPerformance: Math.min(100, Math.max(0, Number(newStudent.previousPerformance) || 0)), attendance: `${Math.min(100, Math.max(0, Number(newStudent.attendance) || 0))}%` };
     setStudents((current) => [student, ...current]);
     setPage(1);
     showFeedback("Student added to the directory");
@@ -132,7 +121,7 @@ const saveStudent = () => {
         </button>
       </div>
       <div className="students-demo-note"><span />Sample student records · Current academic session</div>
-      <div className="students-summary-grid"><div><span>Enrolled students</span><strong>{students.length}</strong><small>In this demo directory</small></div><div><span>Active enrollment</span><strong>{students.filter((student) => student.status === "Active").length}</strong><small>Across all programs</small></div><div><span>Average attendance</span><strong>{students.length ? `${Math.round(students.reduce((sum, student) => sum + Number.parseInt(student.attendance || "0", 10), 0) / students.length)}%` : "—"}</strong><small>Sample attendance data</small></div></div>
+      <div className="students-summary-grid"><div><span>Enrolled students</span><strong>{students.length}</strong><small>In this demo directory</small></div><div><span>Active enrollment</span><strong>{students.filter((student) => student.status === "Active").length}</strong><small>Across all programs</small></div><div><span>Average attendance</span><strong>{students.length ? `${Math.round(students.reduce((sum, student) => sum + Number.parseInt(student.attendance || "0", 10), 0) / students.length)}%` : "—"}</strong><small>Sample attendance data</small></div><div><span>Average performance</span><strong>{students.length ? `${Math.round(students.reduce((sum, student) => sum + Number(student.performance ?? 70), 0) / students.length)}%` : "—"}</strong><small>Used by Student Success AI</small></div></div>
       {showForm && (
   <div className="student-form-card">
 
@@ -199,6 +188,10 @@ const saveStudent = () => {
         <option>Active</option>
         <option>Inactive</option>
       </select>
+
+      <label className="student-score-field">Attendance average (%)<input type="number" min="0" max="100" aria-label="Attendance average" value={newStudent.attendance} onChange={(event) => setNewStudent({ ...newStudent, attendance: event.target.value })} /></label>
+      <label className="student-score-field">Current average (%)<input type="number" min="0" max="100" aria-label="Current average performance" value={newStudent.performance} onChange={(event) => setNewStudent({ ...newStudent, performance: event.target.value })} /></label>
+      <label className="student-score-field">Previous average (%)<input type="number" min="0" max="100" aria-label="Previous average performance" value={newStudent.previousPerformance} onChange={(event) => setNewStudent({ ...newStudent, previousPerformance: event.target.value })} /></label>
 
     </div>
 
@@ -284,6 +277,7 @@ const saveStudent = () => {
                 <th>Course</th>
                 <th>Year</th>
                 <th>Attendance</th>
+                <th>Performance</th>
                 <th>Status</th>
                 <th>Actions</th>
               </tr>
@@ -291,7 +285,7 @@ const saveStudent = () => {
 
             <tbody>
 
-              {visibleStudents.length === 0 && <tr><td colSpan="8"><div className="students-empty-state"><span><Search size={19} /></span><strong>No students found</strong><p>Try another search term or clear your filters.</p><button onClick={() => { setSearch(""); setCourseFilter("All Courses"); setYearFilter("All Years"); }}>Clear filters</button></div></td></tr>}
+              {visibleStudents.length === 0 && <tr><td colSpan="9"><div className="students-empty-state"><span><Search size={19} /></span><strong>No students found</strong><p>Try another search term or clear your filters.</p><button onClick={() => { setSearch(""); setCourseFilter("All Courses"); setYearFilter("All Years"); }}>Clear filters</button></div></td></tr>}
 
               {visibleStudents.map((student) => (
 
@@ -318,6 +312,7 @@ const saveStudent = () => {
                   <td>{student.year}</td>
 
                   <td><span className={`student-attendance ${Number.parseInt(student.attendance, 10) >= 90 ? "good" : "watch"}`}>{student.attendance}</span></td>
+                  <td><span className={`student-attendance ${Number(student.performance ?? 70) >= 60 ? "good" : "watch"}`}>{student.performance ?? 70}%</span></td>
 
                   <td>
                     <span
@@ -414,6 +409,8 @@ const saveStudent = () => {
         </div>
 
         <div><span>Attendance</span><strong>{selectedStudent.attendance}</strong></div>
+        <div><span>Current average</span><strong>{selectedStudent.performance ?? 70}%</strong></div>
+        <div><span>Previous average</span><strong>{selectedStudent.previousPerformance ?? selectedStudent.performance ?? 70}%</strong></div>
 
         <div>
           <span>Status</span>

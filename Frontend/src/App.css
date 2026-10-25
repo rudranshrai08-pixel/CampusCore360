@@ -2605,6 +2605,15 @@ input:focus-visible {
 .dashboard-popover strong, .dashboard-popover > span { display: block; }
 .dashboard-popover strong { color: #172033; font-size: 12px; }
 .dashboard-popover > span { margin-top: 5px; color: #718096; font-size: 11px; }
+.dashboard-notification-popover { width: 290px; }
+.dashboard-notification-entry, .dashboard-notification-link { display: flex; align-items: center; gap: 9px; width: 100%; margin-top: 9px; padding: 8px 5px; border: 0; border-radius: 8px; color: #526077; background: transparent; text-align: left; cursor: pointer; }
+.dashboard-notification-entry:hover, .dashboard-notification-link:hover { background: #f3f7ff; }
+.dashboard-notification-entry > i { width: 7px; height: 7px; flex: 0 0 7px; border-radius: 50%; background: #e9a547; }
+.dashboard-notification-entry > i.priority { background: #dd6470; }
+.dashboard-notification-entry > span { display: grid; flex: 1; gap: 3px; }
+.dashboard-notification-entry strong { color: #33435c; font-size: 10px; }
+.dashboard-notification-entry small { color: #8793a5; font-size: 9px; text-transform: capitalize; }
+.dashboard-notification-link { justify-content: space-between; padding-top: 10px; border-top: 1px solid #edf0f4; border-radius: 0; color: #3166c7; font-size: 10px; font-weight: 750; }
 .dashboard-profile-button { border: 0; padding: 2px 4px; background: transparent; text-align: left; cursor: pointer; }
 .dashboard-profile-button { display: flex; align-items: center; gap: 10px; font: inherit; }
 .erp-overlay { width: 100%; padding: 0; border: 0; cursor: pointer; }

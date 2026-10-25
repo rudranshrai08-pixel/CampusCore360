@@ -549,7 +549,7 @@
 .students-add-btn { display: inline-flex; align-items: center; justify-content: center; gap: 7px; border-radius: 10px; box-shadow: 0 6px 14px rgba(37, 99, 235, .16); }
 .students-demo-note { display: flex; align-items: center; gap: 8px; margin: 0 0 13px; color: #77859a; font-size: 10px; }
 .students-demo-note span { width: 7px; height: 7px; border-radius: 50%; background: #6c8fee; box-shadow: 0 0 0 3px #e8efff; }
-.students-summary-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 13px; margin-bottom: 16px; }
+.students-summary-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 13px; margin-bottom: 16px; }
 .students-summary-grid > div { display: grid; gap: 4px; padding: 14px 16px; border: 1px solid #e6ebf2; border-radius: 13px; background: #fff; box-shadow: 0 3px 12px rgba(15, 23, 42, .025); }
 .students-summary-grid span { color: #7a879a; font-size: 10px; font-weight: 600; }
 .students-summary-grid strong { color: #16223a; font-size: 22px; letter-spacing: -.4px; }
@@ -561,6 +561,7 @@
 .student-form-close { display: grid; width: 33px; height: 33px; place-items: center; border: 0; border-radius: 9px; color: #708096; background: #f3f6fa; cursor: pointer; }
 .student-form-close:hover { color: #1d4ed8; background: #edf4ff; }
 .student-form-error { margin-top: 12px; padding: 10px 12px; border: 1px solid #ffd8dc; border-radius: 8px; color: #b42332; background: #fff3f4; font-size: 11px; }
+.student-score-field { display: grid; gap: 6px; align-content: start; color: #66758b; font-size: 11px; font-weight: 650; }
 .students-search { display: flex; align-items: center; }
 .students-search > svg { position: absolute; left: 14px; color: #8793a5; }
 .students-search input { border-color: #e2e8f0; border-radius: 10px; }
@@ -569,7 +570,7 @@
 .students-card-header { padding: 17px 20px; }
 .students-card-header h2 { color: #152037; font-size: 14px; }
 .students-card-header p { font-size: 10px; }
-.students-table { min-width: 990px; }
+.students-table { min-width: 1100px; }
 .students-table th { color: #748197; font-size: 9px; letter-spacing: .65px; }
 .students-table td { color: #56647a; font-size: 11px; }
 .students-table tbody tr:hover { background: #f7faff; }
