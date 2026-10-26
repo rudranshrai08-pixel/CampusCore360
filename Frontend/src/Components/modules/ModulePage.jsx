@@ -160,6 +160,40 @@ function readModuleRecords(title, fallback, view = "default") {
   }
 }
 
+function formatAttendanceDate(date) {
+  return new Date(`${date}T00:00:00`).toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+}
+
+function todayDateValue() {
+  const today = new Date();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+  return `${today.getFullYear()}-${month}-${day}`;
+}
+
+function readAttendanceRecords(date) {
+  const students = readStudentRecords();
+  const savedRecords = readModuleRecords("Attendance", [], date);
+  const savedByStudent = new Map(savedRecords.map((record) => [record["Student ID"], record]));
+  const validStatuses = new Set(["Present", "Absent", "Late", "Leave"]);
+
+  return students.map((student) => {
+    const savedRecord = savedByStudent.get(student.id);
+    const savedStatus = savedRecord?.Status;
+    return {
+      Student: student.name,
+      "Student ID": student.id,
+      Course: student.course,
+      Date: formatAttendanceDate(date),
+      Status: validStatuses.has(savedStatus) ? savedStatus : "Present",
+    };
+  });
+}
+
 function Workspace({ children }) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -237,7 +271,11 @@ function StatusBadge({ children }) {
 
 function ModulePage({ title, description }) {
   const config = demoModules[title];
-  const [records, setRecords] = useState(() => readModuleRecords(title, config?.records || [], title === "Academics" ? "Programs" : "default"));
+  const isAttendance = title === "Attendance";
+  const [attendanceDate, setAttendanceDate] = useState(todayDateValue);
+  const [records, setRecords] = useState(() => isAttendance
+    ? readAttendanceRecords(attendanceDate)
+    : readModuleRecords(title, config?.records || [], title === "Academics" ? "Programs" : "default"));
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("All records");
   const [page, setPage] = useState(1);
@@ -247,20 +285,19 @@ function ModulePage({ title, description }) {
   const [settingsTab, setSettingsTab] = useState("Profile");
   const [academicTab, setAcademicTab] = useState("Programs");
   const [activeFilter, setActiveFilter] = useState("All");
-  const [attendanceDate, setAttendanceDate] = useState("2026-10-02");
   const pageSize = 6;
-  const isAttendance = title === "Attendance";
   const isReports = title === "Reports";
   const isSettings = title === "Settings";
   const moduleConfig = title === "Academics" ? { ...config, ...academicCatalog[academicTab] } : config || { description, entity: "record", fields: [], columns: [], stats: [], records: [] };
 
   useEffect(() => {
     try {
-      window.sessionStorage.setItem(`campuscore360:${title}:${title === "Academics" ? academicTab : "default"}`, JSON.stringify(records));
+      const view = isAttendance ? attendanceDate : title === "Academics" ? academicTab : "default";
+      window.sessionStorage.setItem(`campuscore360:${title}:${view}`, JSON.stringify(records));
     } catch {
       // Keep the current screen usable when browser storage is unavailable.
     }
-  }, [academicTab, records, title]);
+  }, [academicTab, attendanceDate, isAttendance, records, title]);
 
   const showToast = (message) => {
     setToast(message);
@@ -314,6 +351,13 @@ function ModulePage({ title, description }) {
     showToast(`Attendance marked ${nextStatus.toLowerCase()}`);
   };
 
+  const changeAttendanceDate = (date) => {
+    setAttendanceDate(date);
+    setRecords(readAttendanceRecords(date));
+    setPage(1);
+    setActiveFilter("All");
+  };
+
   const headingAction = !isSettings && !isReports
     ? <button className="module-primary-btn" onClick={openCreate}><Plus size={17} />{isAttendance ? "Record attendance" : `Add ${moduleConfig.entity}`}</button>
     : null;
@@ -332,7 +376,7 @@ function ModulePage({ title, description }) {
           {moduleConfig.stats.map(([label, value, delta, caption], index) => <motion.article className="module-stat-card" key={label} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.06 }}><span className={`module-stat-icon tone-${index % 4}`}>{[<Users size={19} />, <Activity size={19} />, <CalendarDays size={19} />, <ClipboardCheck size={19} />][index]}</span><span className="module-stat-delta">{delta}</span><strong>{value}</strong><span className="module-stat-label">{label}</span><small>{caption}</small></motion.article>)}
         </div>
 
-        {isAttendance && <AttendanceSummary date={attendanceDate} onDateChange={setAttendanceDate} />}
+        {isAttendance && <AttendanceSummary date={attendanceDate} onDateChange={changeAttendanceDate} />}
 
         <section className="module-table-card">
           <div className="module-table-heading"><div><h2>{isAttendance ? "Class register" : `${title} directory`}</h2><p>{filteredRecords.length} records</p></div><button className="module-export-btn" onClick={() => showToast("Export is not available yet")}><Download size={15} />Export</button></div>
@@ -340,7 +384,7 @@ function ModulePage({ title, description }) {
             <label className="module-search"><Search size={17} /><input value={search} onChange={(event) => { setSearch(event.target.value); setPage(1); }} placeholder={`Search ${title.toLowerCase()}…`} aria-label={`Search ${title}`} /></label>
             {isAttendance ? <div className="module-filter-pills" role="group" aria-label="Filter attendance">{["All", "Present", "Absent", "Late", "Leave"].map((status) => <button key={status} className={activeFilter === status ? "selected" : ""} onClick={() => { setActiveFilter(status); setPage(1); }}>{status}</button>)}</div> : <label className="module-select-wrap"><SlidersHorizontal size={15} /><select value={filter} onChange={(event) => { setFilter(event.target.value); setPage(1); }} aria-label="Filter by status"><option>All records</option><option>Active</option><option>Scheduled</option><option>Review</option><option>On leave</option></select><ChevronDown size={14} /></label>}
           </div>
-          {isAttendance && <div className="attendance-date-row"><label><CalendarDays size={16} />Class date<input type="date" value={attendanceDate} onChange={(event) => setAttendanceDate(event.target.value)} /></label><label>Course<select aria-label="Select course"><option>All courses</option><option>Data Structures · CS201</option><option>Web Development · CS310</option><option>Applied Mathematics · MT202</option></select></label><span className="attendance-date-note">Select a student row to update today's register.</span></div>}
+          {isAttendance && <div className="attendance-date-row"><label><CalendarDays size={16} />Class date<input type="date" value={attendanceDate} onChange={(event) => changeAttendanceDate(event.target.value)} /></label><label>Course<select aria-label="Select course"><option>All courses</option><option>Data Structures · CS201</option><option>Web Development · CS310</option><option>Applied Mathematics · MT202</option></select></label><span className="attendance-date-note">Select a student row to update today's register.</span></div>}
           <div className="module-table-scroll"><table className="module-table"><thead><tr>{moduleConfig.columns.map((column) => <th key={column}>{column}</th>)}<th className="module-actions-col">Actions</th></tr></thead><tbody>
             {visibleRecords.map((record, index) => <tr key={`${record[moduleConfig.columns[0]]}-${index}`}>
               {moduleConfig.columns.map((column, cell) => <td key={column}>{cell === 0 ? <div className="module-person-cell"><span className={`module-row-avatar avatar-${index % 5}`}>{String(recordLabel(record)).split(" ").filter(Boolean).slice(-2).map((word) => word[0]).join("").slice(0, 2)}</span><div><strong>{columnValue(record, column)}</strong>{isAttendance && <small>{record["Student ID"]}</small>}</div></div> : column === "Status" ? <StatusBadge>{record[column]}</StatusBadge> : columnValue(record, column)}</td>)}
