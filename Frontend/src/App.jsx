@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { MotionConfig, motion } from "framer-motion";
 
@@ -46,8 +46,12 @@ import { analyzeStudent, readStudentRecords, readStudentSuccessSettings } from "
    LOGIN
    ========================================================= */
 
-function Login() {
+function Login({ onLogin, onLogout }) {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    onLogout();
+  }, [onLogout]);
 
   const [email, setEmail] = useState("admin@gmail.com");
   const [password, setPassword] = useState("admin");
@@ -71,6 +75,7 @@ function Login() {
 
     setError("");
     setIsLoading(true);
+    onLogin();
 
     setTimeout(() => {
       navigate("/dashboard");
@@ -1693,7 +1698,15 @@ function Dashboard() {
    APP ROUTES
    ========================================================= */
 
+function RequireLogin({ isAuthenticated, children }) {
+  return isAuthenticated ? children : <Navigate to="/login" replace />;
+}
+
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const markSignedIn = useCallback(() => setIsAuthenticated(true), []);
+  const clearSignIn = useCallback(() => setIsAuthenticated(false), []);
+
   return (
     <BrowserRouter>
 
@@ -1706,7 +1719,7 @@ function App() {
           path="/"
           element={
             <Navigate
-              to="/student-success"
+              to="/login"
               replace
             />
           }
@@ -1717,7 +1730,7 @@ function App() {
         <Route
           path="/login"
           element={
-            <Login />
+            <Login onLogin={markSignedIn} onLogout={clearSignIn} />
           }
         />
 
@@ -1726,7 +1739,7 @@ function App() {
         <Route
           path="/dashboard"
           element={
-            <Dashboard />
+            <RequireLogin isAuthenticated={isAuthenticated}><Dashboard /></RequireLogin>
           }
         />
 
@@ -1735,15 +1748,15 @@ function App() {
         <Route
           path="/students"
           element={
-            <Workspace activePage="Students">
+            <RequireLogin isAuthenticated={isAuthenticated}><Workspace activePage="Students">
               <Students />
-            </Workspace>
+            </Workspace></RequireLogin>
           }
         />
 
         <Route
           path="/student-success"
-          element={<StudentSuccess />}
+          element={<RequireLogin isAuthenticated={isAuthenticated}><StudentSuccess /></RequireLogin>}
         />
 
         {/* Faculty */}
@@ -1751,10 +1764,10 @@ function App() {
         <Route
           path="/faculty"
           element={
-            <ModulePage
+            <RequireLogin isAuthenticated={isAuthenticated}><ModulePage
               title="Faculty"
               description="Manage faculty profiles, departments and information."
-            />
+            /></RequireLogin>
           }
         />
 
@@ -1763,10 +1776,10 @@ function App() {
         <Route
           path="/academics"
           element={
-            <ModulePage
+            <RequireLogin isAuthenticated={isAuthenticated}><ModulePage
               title="Academics"
               description="Manage academic programs, semesters and activities."
-            />
+            /></RequireLogin>
           }
         />
 
@@ -1775,10 +1788,10 @@ function App() {
         <Route
           path="/attendance"
           element={
-            <ModulePage
+            <RequireLogin isAuthenticated={isAuthenticated}><ModulePage
               title="Attendance"
               description="Track and manage student attendance."
-            />
+            /></RequireLogin>
           }
         />
 
@@ -1787,10 +1800,10 @@ function App() {
         <Route
           path="/courses"
           element={
-            <ModulePage
+            <RequireLogin isAuthenticated={isAuthenticated}><ModulePage
               title="Courses"
               description="Manage courses, subjects and course schedules."
-            />
+            /></RequireLogin>
           }
         />
 
@@ -1799,10 +1812,10 @@ function App() {
         <Route
           path="/examinations"
           element={
-            <ModulePage
+            <RequireLogin isAuthenticated={isAuthenticated}><ModulePage
               title="Examinations"
               description="Manage examinations, schedules and results."
-            />
+            /></RequireLogin>
           }
         />
 
@@ -1811,10 +1824,10 @@ function App() {
         <Route
           path="/reports"
           element={
-            <ModulePage
+            <RequireLogin isAuthenticated={isAuthenticated}><ModulePage
               title="Reports"
               description="View and generate campus management reports."
-            />
+            /></RequireLogin>
           }
         />
 
@@ -1823,10 +1836,10 @@ function App() {
         <Route
           path="/settings"
           element={
-            <ModulePage
+            <RequireLogin isAuthenticated={isAuthenticated}><ModulePage
               title="Settings"
               description="Manage CampusCore360 system settings."
-            />
+            /></RequireLogin>
           }
         />
 
